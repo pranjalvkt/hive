@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./Registration.css"; // Import CSS for styling
+import "./Registration.css";
 
 const Registration = () => {
   const [fullName, setFullName] = useState("");
@@ -11,13 +11,10 @@ const Registration = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Validate Email
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
-  // Validate Password (at least 6 characters)
   const validatePassword = (password) => password.length >= 6;
 
-  // Handle Form Submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -43,17 +40,15 @@ const Registration = () => {
 
     try {
       setIsLoading(true);
-      const response = await axios.post("http://localhost:3001/api/register", {
+      await axios.post("http://localhost:3001/api/register", {
         fullName,
         email,
         password,
       });
 
       toast.success("Registration successful!");
-      
-      // Redirect to login page after successful registration (optional)
       setTimeout(() => {
-        window.location.href = "auth/login";
+        window.location.href = "/auth/login";
       }, 2000);
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed. Please try again.");
@@ -67,7 +62,6 @@ const Registration = () => {
       <ToastContainer />
       <h2>Register</h2>
       <form onSubmit={handleSubmit} className="registration-form">
-        {/* Full Name Field */}
         <div className="form-group">
           <label htmlFor="fullName">Full Name</label>
           <input
@@ -80,7 +74,6 @@ const Registration = () => {
           />
         </div>
 
-        {/* Email Field */}
         <div className="form-group">
           <label htmlFor="email">Email</label>
           <input
@@ -93,7 +86,6 @@ const Registration = () => {
           />
         </div>
 
-        {/* Password Field */}
         <div className="form-group">
           <label htmlFor="password">Password</label>
           <input
@@ -106,7 +98,6 @@ const Registration = () => {
           />
         </div>
 
-        {/* Confirm Password Field */}
         <div className="form-group">
           <label htmlFor="confirmPassword">Confirm Password</label>
           <input
@@ -119,7 +110,6 @@ const Registration = () => {
           />
         </div>
 
-        {/* Loader or Submit Button */}
         {isLoading ? (
           <div className="loading-container">
             <div className="loader"></div>

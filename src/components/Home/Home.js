@@ -7,7 +7,7 @@ import "react-toastify/dist/ReactToastify.css";
 const Home = () => {
   const [userName, setUserName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const navigate = useNavigate(); // Used for navigation in case of invalid token
+  const navigate = useNavigate(); // Used for navigation
 
   // Fetch user details using JWT token
   const fetchUserDetails = async () => {
@@ -36,6 +36,13 @@ const Home = () => {
     }
   };
 
+  // Logout function
+  const handleLogout = () => {
+    localStorage.removeItem("authToken"); // Clear token
+    toast.success("You have logged out successfully.");
+    navigate("/auth/login"); // Redirect to login
+  };
+
   useEffect(() => {
     fetchUserDetails(); // Call the function to fetch user details on component mount
   }, []);
@@ -52,6 +59,9 @@ const Home = () => {
         <div className="welcome-message">
           <h2>Welcome back, {userName}!</h2>
           <p>You're now part of the buzzing Hive, where great things happen.</p>
+          <button onClick={handleLogout} className="logout-button">
+            Logout
+          </button>
         </div>
       )}
     </div>
