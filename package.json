@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@testing-library/jest-dom": "^6.6.3",
+    "@testing-library/react": "^16.1.0",
     "axios": "^1.7.9",
     "cra-template": "1.2.0",
     "react": "^19.0.0",
@@ -10,6 +12,11 @@
     "react-router-dom": "^7.1.1",
     "react-scripts": "5.0.1",
     "react-toastify": "^11.0.2"
+  },
+  "jest": {
+    "moduleNameMapper": {
+      "^axios$": "axios/dist/node/axios.cjs"
+    }
   },
   "scripts": {
     "start": "react-scripts start",
