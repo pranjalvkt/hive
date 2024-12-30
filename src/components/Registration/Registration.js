@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Registration.css";
+import { useNavigate } from "react-router-dom";
+import api from "../../helper/api";
 
 const Registration = () => {
   const [fullName, setFullName] = useState("");
@@ -10,6 +11,7 @@ const Registration = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
@@ -40,16 +42,14 @@ const Registration = () => {
 
     try {
       setIsLoading(true);
-      await axios.post("http://localhost:3001/api/register", {
+      await api.post("/register", {
         fullName,
         email,
         password,
       });
 
       toast.success("Registration successful!");
-      setTimeout(() => {
-        window.location.href = "/auth/login";
-      }, 2000);
+      navigate("/auth/login");
     } catch (err) {
       toast.error(err.response?.data?.message || "Registration failed. Please try again.");
     } finally {
