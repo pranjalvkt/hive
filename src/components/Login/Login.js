@@ -1,14 +1,15 @@
 import React, { useState } from "react";
-import axios from "axios";
+import api from "../../helper/api";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
+  const navigate = useNavigate();
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password) => password.length >= 6;
 
@@ -27,21 +28,16 @@ const Login = () => {
 
     try {
       setIsLoading(true);
-      const response = await axios.post("http://localhost:3001/api/login", {
+      const response = await api.post("/login", {
         email,
         password,
       });
 
-      const { token } = response.data;
-
-      // Save JWT token and notify success
+      const { token, user_email, user_id, user_name } = response.data;
+      localStorage.setItem("user", JSON.stringify({"user_email": user_email, "user_id": user_id, "user_name": user_name}));
       localStorage.setItem("authToken", token);
       toast.success("Login successful!");
-
-      // Redirect to dashboard after a short delay
-      setTimeout(() => {
-        window.location.href = "/";
-      }, 2000);
+      navigate("/");
     } catch (err) {
       toast.error(err.response?.data?.message || "Login failed. Please try again.");
     } finally {
