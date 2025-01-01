@@ -4,7 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PostList from "./PostList";
 import api from "../../helper/api";
-
+import './Home.css'
 const Home = () => {
   const [userName, setUserName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -49,7 +49,7 @@ const Home = () => {
         </div>
       ) : (
         <div className="welcome-message">
-          <h2>Welcome back, {userName}!</h2>
+          <h2 className="welcome-msg">Welcome back, {userName}!</h2>
         </div>
         
       )}

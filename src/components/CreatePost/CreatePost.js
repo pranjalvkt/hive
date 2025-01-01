@@ -13,11 +13,7 @@ function CreatePost() {
   });
   const [errors, setErrors] = useState({});
 
-  const user = JSON.parse(localStorage.getItem('user')) || {
-    user_id: '12345',
-    user_email: 'testuser@gmail.com',
-    user_name: 'Test User',
-  };
+  const user = JSON.parse(localStorage.getItem('user'));
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -83,9 +79,9 @@ function CreatePost() {
     data.append('title', title);
     data.append('description', description);
     data.append('file', file);
-    data.append('userId', user.user_id); 
-    data.append('userEmail', user.user_email);
-    data.append('userName', user.user_name);
+    data.append('userId', user?.user_id); 
+    data.append('userEmail', user?.user_email);
+    data.append('userName', user?.user_name);
 
     try {
       await api.post('/posts/create', data, {
@@ -105,9 +101,10 @@ function CreatePost() {
 
   return (
     <>
-      <Button variant="primary" onClick={handleShow}>
-        Create Post
-      </Button>
+      
+      <button className="btn" onClick={handleShow}>
+      <img className="icons" src='./plus-square.svg' alt='Create post'/>
+      </button>
 
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>

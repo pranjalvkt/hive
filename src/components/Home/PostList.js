@@ -3,6 +3,8 @@ import api from "../../helper/api";
 const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const user = JSON.parse(localStorage.getItem('user'));
+
   const calculateTimeAgo = (createdAt) => {
     const currentTime = new Date();
     const creationTime = new Date(createdAt);
@@ -32,7 +34,13 @@ const PostList = () => {
     const fetchPosts = async () => {
       try {
         const response = await api.get("/posts");
-        setPosts(response.data);
+        let postArr = [];
+        for (const post of response.data) {
+          if(post?.userId === user?.user_id) {
+            postArr.push(post);
+          }
+        }
+        setPosts(postArr);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching posts:", error);
@@ -48,11 +56,11 @@ const PostList = () => {
   }
 
   return (
-    <div className="post-list">
-      <div className="row row-cols-1 row-cols-md-3 g-4 justify-content-center">
+    <div className="post-list ">
+      <div className="d-sm-flex justify-content-sm-around">
         {posts.map((post) => (
-          <div key={post._id} className="col">
-            <div className="card w-50">
+          <div key={post._id} className="w-25">
+            <div className="card">
               <div className="card-header">
                 {post.userName}
               </div>
