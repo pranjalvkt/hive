@@ -103,7 +103,7 @@ function CreatePost() {
     <>
       
       <button className="btn" onClick={handleShow}>
-      <img className="icons" src='./plus-square.svg' alt='Create post'/>
+      <img className="icons" src={`${process.env.PUBLIC_URL}/assets/icons/plus-square.svg`} alt='Create post'/>
       </button>
 
       <Modal show={show} onHide={handleClose}>

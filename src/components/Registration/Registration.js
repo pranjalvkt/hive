@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Registration.css";
 import { useNavigate } from "react-router-dom";
-import api from "../../helper/api";
-
+import { useDispatch } from "react-redux";
+import { registerRequest } from "../../actions/authActions";
+import { useSelector } from "react-redux";
 const Registration = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-
   const validatePassword = (password) => password.length >= 6;
-
+  const { loading } = useSelector((state) => state.auth);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -41,25 +41,19 @@ const Registration = () => {
     }
 
     try {
-      setIsLoading(true);
-      await api.post("/register", {
-        fullName,
-        email,
-        password,
-      });
-
-      toast.success("Registration successful!");
-      navigate("/auth/login");
+      dispatch(registerRequest({ fullName, email, password }));
+      setTimeout(() => {
+        navigate("/auth/login");
+      }, 1000);
     } catch (err) {
-      toast.error(err.response?.data?.message || "Registration failed. Please try again.");
-    } finally {
-      setIsLoading(false);
+      toast.error(
+        err.response?.data?.message || "Registration failed. Please try again."
+      );
     }
   };
 
   return (
     <div className="registration-container">
-      <ToastContainer />
       <h2>Register</h2>
       <form onSubmit={handleSubmit} className="registration-form">
         <div className="form-group">
@@ -110,7 +104,7 @@ const Registration = () => {
           />
         </div>
 
-        {isLoading ? (
+        {loading ? (
           <div className="loading-container">
             <div className="loader"></div>
             <span className="loading-text">Setting up your Hive...</span>
