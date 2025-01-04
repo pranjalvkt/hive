@@ -29,3 +29,5 @@ Follow the steps below to get the project up and running locally.
 1. Clone the repository:
    ```bash
    git clone https://github.com/yourusername/hive.git
+
+I am working on a project, which is a social media app, it has several component - Login, registration, Home, Profile, chat, notification, Friends, Posts. I want to implement redux saga here, Please structure it well, and keep the scope of further enhancements

@@ -1,21 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import PostList from "./PostList";
 import api from "../../helper/api";
 import './Home.css'
+
 const Home = () => {
   const [userName, setUserName] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
   const fetchUserDetails = async () => {
+    console.log('trigger from home');
+    
     const token = localStorage.getItem("authToken");
 
     if (!token) {
       toast.error("You are not authenticated. Please log in.");
-      navigate("/auth/login");
+      setTimeout(() => {
+        navigate("/auth/login");
+      }, 1000);
       return;
     }
 
@@ -31,7 +36,9 @@ const Home = () => {
     } catch (err) {
       toast.error("Session expired! Please log in again.");
       localStorage.removeItem("authToken");
-      navigate("/auth/login");
+      setTimeout(()=> {
+        navigate("/auth/login");
+      }, 1000)
     }
   };
 
@@ -41,7 +48,6 @@ const Home = () => {
 
   return (
     <div className="home-container">
-      <ToastContainer />
       {isLoading ? (
         <div className="loading-container">
           <div className="loader"></div>
