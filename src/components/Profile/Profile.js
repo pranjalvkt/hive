@@ -4,16 +4,21 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import api from "../../helper/api";
+import { isEmpty } from "../../helper/utilities";
+import { useSelector } from "react-redux";
 
 const Profile = () => {
-  const user = JSON.parse(localStorage.getItem("user"));
   const token = localStorage.getItem("authToken");
 
-  const [userId, setUserId] = useState(user.user_id);
-  const [username, setUsername] = useState(user.user_name);
-  const [email, setEmail] = useState(user.user_email);
-  const [profilePic, setProfilePic] = useState('./blank-avatar.png');
-  
+  const { user } = useSelector((state) => state.auth);
+
+  const [userId, setUserId] = useState(user?.user_id);
+  const [username, setUsername] = useState(user?.user_name);
+  const [email, setEmail] = useState(user?.user_email);
+  const [profilePic, setProfilePic] = useState(
+    process.env.PUBLIC_URL + "/assets/images/blank-avatar.png"
+  );
+
   const [showEditModal, setShowEditModal] = useState(false);
   const [newUsername, setNewUsername] = useState(username);
   const [newProfilePic, setNewProfilePic] = useState(null);
@@ -29,44 +34,23 @@ const Profile = () => {
 
   const navigate = useNavigate();
 
-  const fetchUserDetails = async () => {
-    if (!token) {
-      toast.error("You are not authenticated. Please log in.");
-      setTimeout(() => {
-        navigate("/auth/login");
-      }, 1000);
-      return;
-    }
-    try {
-      const response = await api.get("/user", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setEmail(response.data.email);
-      setUsername(response.data.fullName);
-      setUserId(response.data?._id);
-      
-      setProfilePic(
-        response.data?.profilePic ? `http://localhost:3001/api/userImage/${response.data?._id}` :
-        profilePic
-      );
-      
-    } catch (err) {
-      toast.error("Session expired! Please log in again.");
-      localStorage.removeItem("authToken");
-      setTimeout(() => {
-        navigate("/auth/login");
-      }, 1000);
-    }
+  const fetchUserDetails = () => {
+    setEmail(user.user_email);
+    setUsername(user.user_name);
+    setUserId(user.user_id);
+    setProfilePic(
+      !isEmpty(user?.profilePic)
+        ? `http://localhost:3001/api/userImage/${user?._id}`
+        : profilePic
+    );
   };
 
   const updateUserDetails = async () => {
     const data = {
-        "fullName": newUsername,
-        "file": newProfilePic
-    }
-    
+      fullName: newUsername,
+      file: newProfilePic,
+    };
+
     if (!token) {
       toast.error("You are not authenticated. Please log in.");
       setTimeout(() => {
@@ -77,7 +61,7 @@ const Profile = () => {
     try {
       const response = await api.put(`/updateUser/${userId}`, data, {
         headers: {
-          'Content-Type': 'multipart/form-data',
+          "Content-Type": "multipart/form-data",
         },
       });
       setUsername(response.data.user.fullName);
@@ -92,26 +76,27 @@ const Profile = () => {
   };
 
   useEffect(() => {
-    fetchUserDetails();
-  }, []);
+    if (user) {
+      fetchUserDetails(); // Only fetch profile after user data is available
+    }
+  }, [user]);
 
   // Function to handle profile picture change
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-        setNewProfilePic(e.target.files[0]);
+      setNewProfilePic(e.target.files[0]);
     }
   };
 
-  // Function to handle username change
-  const handleUsernameChange = () => {
+  // Function to handle Profile change
+  const handleProfileChange = () => {
     setUsername(newUsername);
     setProfilePic(newProfilePic);
     updateUserDetails();
     setShowEditModal(false);
   };
 
-  // Render user posts
   const renderPosts = () => {
     return posts.map((post) => (
       <div key={post.id} className="mb-2 p-3 border rounded">
@@ -216,7 +201,7 @@ const Profile = () => {
           <Button variant="secondary" onClick={() => setShowEditModal(false)}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleUsernameChange}>
+          <Button variant="primary" onClick={handleProfileChange}>
             Save Changes
           </Button>
         </Modal.Footer>

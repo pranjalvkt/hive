@@ -5,16 +5,18 @@ import CreatePost from "../CreatePost/CreatePost";
 import NotificationModal from "../Notification/NotificationModal";
 import SearchModal from "../Search/SearchModal"; // Import SearchModal
 import "./Navbar.css";
-import api from "../../helper/api";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { isEmpty } from "../../helper/utilities";
+import { getUserRequest } from "../../actions/authActions";
+
 const Navbar = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const location = useLocation();
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
   
   const token = localStorage.getItem("authToken");
-  const [profilePic, setProfilePic] = useState(process.env.PUBLIC_URL+'/blank-avatar.png');
+  const [profilePic, setProfilePic] = useState(process.env.PUBLIC_URL+'/assets/images/blank-avatar.png');
 
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false); // State for Search Modal visibility
@@ -26,29 +28,29 @@ const Navbar = () => {
     navigate("/auth/login");
   };
 
-  const fetchProfile = async () => {
-    console.log('trigger from nav');
+  const fetchProfile = () => {
     
-    try {
-      const response = await api.get("/user", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+    if(user) {
+      console.log(!isEmpty(user?.profilePic));
+      
       setProfilePic(
-        response.data?.profilePic ? `http://localhost:3001/api/userImage/${response.data?._id}` :
+        !isEmpty(user?.profilePic) ? `http://localhost:3001/api/userImage/${user?.user_id}` :
         profilePic
       );
-    } catch (err) {
-
     }
   }
 
   useEffect(() => {
-    if(token) {
-      fetchProfile();
+    if (token) {
+      dispatch(getUserRequest(token)); // Dispatch to get user
     }
-  }, []);
+  }, [token, dispatch]);
+
+  useEffect(() => {
+    if (user) {
+      fetchProfile(); // Only fetch profile after user data is available
+    }
+  }, [user]);
 
 
   const handleShowSearchModal = () => setShowSearchModal(true);
@@ -83,7 +85,7 @@ const Navbar = () => {
               <button className="btn">
                 <img
                   className="icons"
-                  src={`${process.env.PUBLIC_URL}/chat-left-text.svg`}
+                  src={`${process.env.PUBLIC_URL}/assets/icons/chat-left-text.svg`}
                   alt="Chat"
                 />
               </button>
@@ -92,7 +94,7 @@ const Navbar = () => {
               <button className="btn">
                 <img
                   className="icons"
-                  src={`${process.env.PUBLIC_URL}/bell.svg`}
+                  src={`${process.env.PUBLIC_URL}/assets/icons/bell.svg`}
                   alt="Notification"
                 />
               </button>
@@ -101,7 +103,7 @@ const Navbar = () => {
               <button className="btn">
                 <img
                   className="icons"
-                  src={`${process.env.PUBLIC_URL}/search.svg`}
+                  src={`${process.env.PUBLIC_URL}/assets/icons/search.svg`}
                   alt="Search"
                 />
               </button>
@@ -110,7 +112,7 @@ const Navbar = () => {
               <button className="btn">
                 <img
                   className="icons"
-                  src={`${process.env.PUBLIC_URL}/person.svg`}
+                  src={`${process.env.PUBLIC_URL}/assets/icons/person.svg`}
                   alt="Friends"
                 />
               </button>
@@ -155,7 +157,7 @@ const Navbar = () => {
                 </li>
                 <li className="nav-item">
                   <button className="btn" onClick={handleLogout}>
-                    <img className="icons" src={`${process.env.PUBLIC_URL}/box-arrow-right.svg`} alt="Log out" />
+                    <img className="icons" src={`${process.env.PUBLIC_URL}/assets/icons/box-arrow-right.svg`} alt="Log out" />
                   </button>
                 </li>
               </>

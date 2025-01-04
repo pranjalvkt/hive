@@ -5,6 +5,9 @@ import {
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
+  GET_USER_REQUEST,
+  GET_USER_SUCCESS,
+  GET_USER_FAILURE,
 } from "../actions/authActions";
 
 const initialState = {
@@ -24,6 +27,12 @@ const authReducer = (state = initialState, action) => {
       return { ...state, loading: false };
     case LOGIN_FAILURE:
     case REGISTER_FAILURE:
+      return { ...state, loading: false, error: action.payload };
+    case GET_USER_REQUEST:
+      return { ...state, loading: true };
+    case GET_USER_SUCCESS:
+      return { ...state, loading: false, user: action.payload };
+    case GET_USER_FAILURE:
       return { ...state, loading: false, error: action.payload };
     default:
       return state;

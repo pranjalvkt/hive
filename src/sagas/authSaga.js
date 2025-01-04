@@ -1,6 +1,6 @@
 import { call, put, takeEvery } from 'redux-saga/effects';
-import { loginAPI, registerAPI } from '../services/authService';
-import { LOGIN_REQUEST, REGISTER_REQUEST, LOGIN_SUCCESS, REGISTER_SUCCESS, LOGIN_FAILURE, REGISTER_FAILURE } from '../actions/authActions';
+import { loginAPI, registerAPI, userDetailsAPI } from '../services/authService';
+import { LOGIN_REQUEST, REGISTER_REQUEST, LOGIN_SUCCESS, REGISTER_SUCCESS, LOGIN_FAILURE, REGISTER_FAILURE, GET_USER_REQUEST, GET_USER_SUCCESS, GET_USER_FAILURE } from '../actions/authActions';
 import { toast } from 'react-toastify';
 
 function* loginSaga(action) {
@@ -31,7 +31,21 @@ function* registerSaga(action) {
   }
 }
 
+function* getUserSaga(action) {
+  try {
+    const {token} = action.payload;
+    const response = yield call(userDetailsAPI, { token });
+    
+    yield put({ type: GET_USER_SUCCESS, payload: response.data });
+
+  } catch (error) {
+    yield put({ type: GET_USER_FAILURE, payload: error.message });
+    toast.error("Something went wrong!");
+  }
+}
+
 export default function* authSaga() {
   yield takeEvery(LOGIN_REQUEST, loginSaga);
   yield takeEvery(REGISTER_REQUEST, registerSaga);
+  yield takeEvery(GET_USER_REQUEST, getUserSaga);
 }
