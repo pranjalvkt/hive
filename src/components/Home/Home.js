@@ -10,10 +10,7 @@ const Home = () => {
   const [userName, setUserName] = useState(user?.user_name);
 
   const fetchUserDetails = () => {
-    
-    if(user) {
-      setUserName(user.user_name);
-    }
+    setUserName(user?.user_name);
   };
   
   useEffect(() => {

@@ -5,3 +5,7 @@
 .icons {
     width: 150%;
 }
+
+.cursor {
+    cursor: pointer;
+}

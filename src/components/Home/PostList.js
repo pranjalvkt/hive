@@ -4,7 +4,7 @@ const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const user = JSON.parse(localStorage.getItem('user'));
-
+  const token = localStorage.getItem('authToken');
   const calculateTimeAgo = (createdAt) => {
     const currentTime = new Date();
     const creationTime = new Date(createdAt);
@@ -29,25 +29,23 @@ const PostList = () => {
 
     return timeAgo;
   };
+  const fetchPosts = async () => {
+    try {
+      const response = await api.get("/posts", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setPosts(response.data);
+      setLoading(false);
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await api.get("/posts");
-        let postArr = [];
-        for (const post of response.data) {
-          if(post?.userId === user?.user_id) {
-            postArr.push(post);
-          }
-        }
-        setPosts(postArr);
-        setLoading(false);
-      } catch (error) {
-        console.error("Error fetching posts:", error);
-        setLoading(false);
-      }
-    };
-
+    
     fetchPosts(); 
   }, []);
 

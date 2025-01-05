@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Modal, InputGroup, FormControl } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { updateUserRequest } from "../../actions/authActions";
+import { getImage } from "../../helper/utilities"; 
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-import api from "../../helper/api";
-import { isEmpty } from "../../helper/utilities";
-import { useSelector } from "react-redux";
 
 const Profile = () => {
-  const token = localStorage.getItem("authToken");
+  const dispatch = useDispatch();
 
   const { user } = useSelector((state) => state.auth);
-
-  const [userId, setUserId] = useState(user?.user_id);
   const [username, setUsername] = useState(user?.user_name);
   const [email, setEmail] = useState(user?.user_email);
-  const [profilePic, setProfilePic] = useState(
-    process.env.PUBLIC_URL + "/assets/images/blank-avatar.png"
-  );
+  const [profilePic, setProfilePic] = useState(getImage(user?.profilePic));
 
   const [showEditModal, setShowEditModal] = useState(false);
-  const [newUsername, setNewUsername] = useState(username);
+  const [newUsername, setNewUsername] = useState('');
   const [newProfilePic, setNewProfilePic] = useState(null);
 
   const [friends, setFriends] = useState([
@@ -32,56 +27,33 @@ const Profile = () => {
     { id: 2, content: "Just finished a new project, feeling accomplished!" },
   ]);
 
-  const navigate = useNavigate();
-
   const fetchUserDetails = () => {
     setEmail(user.user_email);
     setUsername(user.user_name);
-    setUserId(user.user_id);
-    setProfilePic(
-      !isEmpty(user?.profilePic)
-        ? `http://localhost:3001/api/userImage/${user?._id}`
-        : profilePic
-    );
+    setProfilePic(getImage(user?.profilePic));
   };
 
-  const updateUserDetails = async () => {
-    const data = {
-      fullName: newUsername,
-      file: newProfilePic,
-    };
-
-    if (!token) {
-      toast.error("You are not authenticated. Please log in.");
-      setTimeout(() => {
-        navigate("/auth/login");
-      }, 1000);
+  const updateUserDetails = () => {
+    if (!newUsername && !newProfilePic) {
+      toast.warn("No new values provided for update.");
       return;
     }
-    try {
-      const response = await api.put(`/updateUser/${userId}`, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      setUsername(response.data.user.fullName);
-      setProfilePic(`http://localhost:3001/api/userImage/${userId}`);
-    } catch (err) {
-      toast.error("Session expired! Please log in again.");
-      localStorage.removeItem("authToken");
-      setTimeout(() => {
-        navigate("/auth/login");
-      }, 1000);
-    }
+  
+    const data = {
+      fullName: newUsername || username,
+      file: newProfilePic || profilePic,
+    };
+  
+    dispatch(updateUserRequest({ id: user.user_id, data: data }));
   };
+  
 
   useEffect(() => {
     if (user) {
-      fetchUserDetails(); // Only fetch profile after user data is available
+      fetchUserDetails();
     }
-  }, [user]);
+  }, [user, dispatch]);
 
-  // Function to handle profile picture change
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -89,10 +61,7 @@ const Profile = () => {
     }
   };
 
-  // Function to handle Profile change
   const handleProfileChange = () => {
-    setUsername(newUsername);
-    setProfilePic(newProfilePic);
     updateUserDetails();
     setShowEditModal(false);
   };
@@ -177,12 +146,12 @@ const Profile = () => {
         <Modal.Body>
           <Form>
             <Form.Group controlId="username">
-              <Form.Label>Username</Form.Label>
+              <Form.Label>Full Name</Form.Label>
               <Form.Control
                 type="text"
                 value={newUsername}
                 onChange={(e) => setNewUsername(e.target.value)}
-                placeholder="Enter new username"
+                placeholder="Enter new Full Name"
               />
             </Form.Group>
             <Form.Group controlId="profilePic">
