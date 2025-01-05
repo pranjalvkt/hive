@@ -18,3 +18,14 @@ export const userDetailsAPI = async (data) => {
   });
   return response;
 }
+
+export const updateUserDetailsAPI = async (userData) => {
+  const {id, data} = userData;
+  
+  const response = await api.put(`/updateUser/${id}`, data, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response;
+}

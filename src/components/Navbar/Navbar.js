@@ -3,11 +3,11 @@ import { useNavigate, Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import CreatePost from "../CreatePost/CreatePost";
 import NotificationModal from "../Notification/NotificationModal";
-import SearchModal from "../Search/SearchModal"; // Import SearchModal
+import SearchModal from "../Search/SearchModal";
 import "./Navbar.css";
 import { useSelector, useDispatch } from "react-redux";
-import { isEmpty } from "../../helper/utilities";
 import { getUserRequest } from "../../actions/authActions";
+import { getImage } from "../../helper/utilities";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -16,10 +16,10 @@ const Navbar = () => {
   const { user } = useSelector((state) => state.auth);
   
   const token = localStorage.getItem("authToken");
-  const [profilePic, setProfilePic] = useState(process.env.PUBLIC_URL+'/assets/images/blank-avatar.png');
+  const [profilePic, setProfilePic] = useState(getImage(user?.profilePic));
 
   const [showNotificationModal, setShowNotificationModal] = useState(false);
-  const [showSearchModal, setShowSearchModal] = useState(false); // State for Search Modal visibility
+  const [showSearchModal, setShowSearchModal] = useState(false);
 
   const handleLogout = () => {
     localStorage.removeItem("authToken");
@@ -29,26 +29,22 @@ const Navbar = () => {
   };
 
   const fetchProfile = () => {
-    
     if(user) {
-      console.log(!isEmpty(user?.profilePic));
-      
-      setProfilePic(
-        !isEmpty(user?.profilePic) ? `http://localhost:3001/api/userImage/${user?.user_id}` :
-        profilePic
-      );
+      setProfilePic(getImage(user?.profilePic));
     }
   }
 
   useEffect(() => {
     if (token) {
-      dispatch(getUserRequest(token)); // Dispatch to get user
+      dispatch(getUserRequest(token));
+    } else {
+      navigate("/auth/login");
     }
   }, [token, dispatch]);
 
   useEffect(() => {
     if (user) {
-      fetchProfile(); // Only fetch profile after user data is available
+      fetchProfile();
     }
   }, [user]);
 
@@ -64,7 +60,7 @@ const Navbar = () => {
       <div className="container-fluid">
         <ul className="navbar-nav me-auto">
           <li className="nav-item" onClick={() => navigate("/")}>
-            <h2>Hive</h2>
+            <h2 className="cursor">Hive</h2>
           </li>
         </ul>
         <button
@@ -145,12 +141,11 @@ const Navbar = () => {
                   <img
                     src={profilePic}
                     alt="User Profile"
-                    className="rounded-circle"
+                    className="rounded-circle cursor"
                     style={{
-                      width: "40px", // Adjust size
+                      width: "100%",
                       height: "40px", // Adjust size
                       objectFit: "cover", // Ensures image covers the area
-                      marginRight: "10px", // Adds space between profile pic and logout button
                     }}
                     onClick={() => navigate("/profile")}
                   />

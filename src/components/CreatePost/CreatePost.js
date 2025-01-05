@@ -15,7 +15,10 @@ function CreatePost() {
 
   const user = JSON.parse(localStorage.getItem('user'));
 
-  const handleClose = () => setShow(false);
+  const handleClose = () => {
+    setErrors({})
+    setShow(false);
+  }
   const handleShow = () => setShow(true);
 
   const validate = () => {

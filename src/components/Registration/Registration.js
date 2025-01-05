@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { registerRequest } from "../../actions/authActions";
 import { useSelector } from "react-redux";
+
 const Registration = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
