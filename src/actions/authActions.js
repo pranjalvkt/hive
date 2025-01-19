@@ -36,9 +36,8 @@ export const registerRequest = (userData) => ({
   payload: userData,
 });
 
-export const registerSuccess = (userData) => ({
+export const registerSuccess = () => ({
   type: REGISTER_SUCCESS,
-  payload: userData,
 });
 
 export const registerFailure = (error) => ({

@@ -108,7 +108,6 @@ const Profile = () => {
           <Button
             variant="outline-secondary"
             onClick={() => setShowEditModal(true)}
-            block
           >
             Edit Profile
           </Button>
