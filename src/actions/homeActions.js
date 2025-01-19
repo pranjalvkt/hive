@@ -1,7 +1,0 @@
-export const FETCH_HOME_FEED_REQUEST = 'FETCH_HOME_FEED_REQUEST';
-export const FETCH_HOME_FEED_SUCCESS = 'FETCH_HOME_FEED_SUCCESS';
-export const FETCH_HOME_FEED_FAILURE = 'FETCH_HOME_FEED_FAILURE';
-
-export const fetchHomeFeedRequest = () => ({
-  type: FETCH_HOME_FEED_REQUEST,
-});

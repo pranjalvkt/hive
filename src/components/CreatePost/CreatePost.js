@@ -1,24 +1,28 @@
-import { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Form from 'react-bootstrap/Form';
-import Modal from 'react-bootstrap/Modal';
-import { toast } from 'react-toastify';
-import api from '../../helper/api';
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Form from "react-bootstrap/Form";
+import Modal from "react-bootstrap/Modal";
+import { createPostRequest } from "../../actions/postsActions";
+import { useDispatch, useSelector } from "react-redux";
+
 function CreatePost() {
+  const dispatch = useDispatch();
+  const {user } = useSelector((state) => state.auth);
+  
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState({
-    title: '',
-    description: '',
+    title: "",
+    description: "",
     file: null,
   });
   const [errors, setErrors] = useState({});
-
-  const user = JSON.parse(localStorage.getItem('user'));
+  
+  
 
   const handleClose = () => {
-    setErrors({})
+    setErrors({});
     setShow(false);
-  }
+  };
   const handleShow = () => setShow(true);
 
   const validate = () => {
@@ -26,27 +30,28 @@ function CreatePost() {
     const { title, description, file } = formData;
 
     if (!title || title.trim().length < 3) {
-      newErrors.title = 'Title must be at least 3 characters long.';
+      newErrors.title = "Title must be at least 3 characters long.";
     } else if (title.length > 100) {
-      newErrors.title = 'Title cannot exceed 100 characters.';
+      newErrors.title = "Title cannot exceed 100 characters.";
     }
 
     if (!description || description.trim().length < 10) {
-      newErrors.description = 'Description must be at least 10 characters long.';
+      newErrors.description =
+        "Description must be at least 10 characters long.";
     } else if (description.length > 500) {
-      newErrors.description = 'Description cannot exceed 500 characters.';
+      newErrors.description = "Description cannot exceed 500 characters.";
     }
 
     if (!file) {
-      newErrors.file = 'Please upload a file.';
+      newErrors.file = "Please upload a file.";
     } else {
-      const allowedFileTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+      const allowedFileTypes = ["image/jpeg", "image/png", "application/pdf"];
       if (!allowedFileTypes.includes(file.type)) {
-        newErrors.file = 'Only JPG, PNG, or PDF files are allowed.';
+        newErrors.file = "Only JPG, PNG, or PDF files are allowed.";
       }
       const maxFileSize = 5 * 1024 * 1024;
       if (file.size > maxFileSize) {
-        newErrors.file = 'File size cannot exceed 5 MB.';
+        newErrors.file = "File size cannot exceed 5 MB.";
       }
     }
 
@@ -79,34 +84,26 @@ function CreatePost() {
     const { title, description, file } = formData;
 
     const data = new FormData();
-    data.append('title', title);
-    data.append('description', description);
-    data.append('file', file);
-    data.append('userId', user?.user_id); 
-    data.append('userEmail', user?.user_email);
-    data.append('userName', user?.user_name);
-
-    try {
-      await api.post('/posts/create', data, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      toast.success('Post created successfully!');
-      setShow(false);
-      setFormData({ title: '', description: '', file: null });
-      setErrors({});
-    } catch (error) {
-      console.error('Error creating post', error);
-      toast.error('Something went wrong. Please try again.');
-    }
+    data.append("title", title);
+    data.append("description", description);
+    data.append("file", file);
+    data.append("userId", user?.user_id);
+    data.append("userEmail", user?.user_email);
+    data.append("userName", user?.user_name);
+    dispatch(createPostRequest(data));
+    setShow(false);
+    setFormData({ title: "", description: "", file: null });
+    setErrors({});
   };
 
   return (
     <>
-      
       <button className="btn" onClick={handleShow}>
-      <img className="icons" src={`${process.env.PUBLIC_URL}/assets/icons/plus-square.svg`} alt='Create post'/>
+        <img
+          className="icons"
+          src={`${process.env.PUBLIC_URL}/assets/icons/plus-square.svg`}
+          alt="Create post"
+        />
       </button>
 
       <Modal show={show} onHide={handleClose}>
@@ -166,6 +163,6 @@ function CreatePost() {
       </Modal>
     </>
   );
-}
+};
 
 export default CreatePost;
