@@ -2,7 +2,7 @@ import { Button } from "react-bootstrap";
 import { getImage } from "../../helper/utilities";
 
 const FriendCard = (props) => {
-    const {users, id, handlerFunction, type} = props;
+  const {users, id, buttonText, handlerFunctionBtn, acceptText, acceptFunction} = props;
   return (
     <>
       <li
@@ -16,14 +16,25 @@ const FriendCard = (props) => {
             className="rounded-circle me-2"
             style={{ width: "40px", height: "40px", objectFit: "cover" }}
           />
-          {users?.fullName} (@{users?.email})
+          {users?.fullName}
         </div>
+        <div>
         <Button
-          variant={type === "Add Friend" ? 'primary' : "danger"}
-          onClick={() => handlerFunction(id)}
+          className="mx-2"
+          variant={buttonText === "Add Friend" ? 'primary' : "danger"}
+          onClick={() => handlerFunctionBtn(id)}
         >
-          {type}
+          {buttonText}
         </Button>
+        {acceptText && <Button
+          className="mx-2"
+          variant='primary'
+          onClick={() => acceptFunction(id)}
+        >
+          {acceptText}
+        </Button>}
+        </div>
+        
       </li>
     </>
   );
