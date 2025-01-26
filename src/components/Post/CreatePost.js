@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Modal from "react-bootstrap/Modal";
-import { createPostRequest } from "../../actions/postsActions";
 import { useDispatch, useSelector } from "react-redux";
+import { createPostRequest } from "../../actions/postsActions";
+import PostModal from "../Common/PostModal";
 
 function CreatePost() {
   const dispatch = useDispatch();
-  const {user } = useSelector((state) => state.auth);
-  
+  const { user } = useSelector((state) => state.auth);
+
   const [show, setShow] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
@@ -16,14 +14,11 @@ function CreatePost() {
     file: null,
   });
   const [errors, setErrors] = useState({});
-  
-  
 
   const handleClose = () => {
     setErrors({});
     setShow(false);
   };
-  const handleShow = () => setShow(true);
 
   const validate = () => {
     const newErrors = {};
@@ -36,8 +31,7 @@ function CreatePost() {
     }
 
     if (!description || description.trim().length < 10) {
-      newErrors.description =
-        "Description must be at least 10 characters long.";
+      newErrors.description = "Description must be at least 10 characters long.";
     } else if (description.length > 500) {
       newErrors.description = "Description cannot exceed 500 characters.";
     }
@@ -76,13 +70,9 @@ function CreatePost() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!validate()) {
-      return;
-    }
+    if (!validate()) return;
 
     const { title, description, file } = formData;
-
     const data = new FormData();
     data.append("title", title);
     data.append("description", description);
@@ -90,15 +80,15 @@ function CreatePost() {
     data.append("userId", user?.user_id);
     data.append("userEmail", user?.user_email);
     data.append("userName", user?.user_name);
+
     dispatch(createPostRequest(data));
-    setShow(false);
+    handleClose();
     setFormData({ title: "", description: "", file: null });
-    setErrors({});
   };
 
   return (
     <>
-      <button className="btn" onClick={handleShow}>
+      <button className="btn" onClick={() => setShow(true)} title="Create Post">
         <img
           className="icons"
           src={`${process.env.PUBLIC_URL}/assets/icons/plus-square.svg`}
@@ -106,63 +96,19 @@ function CreatePost() {
         />
       </button>
 
-      <Modal show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Create Post</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form onSubmit={handleSubmit}>
-            <Form.Group className="mb-3" controlId="postTitle">
-              <Form.Label>Title</Form.Label>
-              <Form.Control
-                type="text"
-                placeholder="Enter post title"
-                name="title"
-                value={formData.title}
-                onChange={onInputChange}
-                isInvalid={!!errors.title}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.title}
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="postDescription">
-              <Form.Label>Description</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows={3}
-                placeholder="Enter post description"
-                name="description"
-                value={formData.description}
-                onChange={onInputChange}
-                isInvalid={!!errors.description}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.description}
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group className="mb-3" controlId="postFile">
-              <Form.Label>Upload File</Form.Label>
-              <Form.Control
-                type="file"
-                onChange={onFileChange}
-                isInvalid={!!errors.file}
-              />
-              <Form.Control.Feedback type="invalid">
-                {errors.file}
-              </Form.Control.Feedback>
-            </Form.Group>
-
-            <Button variant="primary" type="submit">
-              Submit
-            </Button>
-          </Form>
-        </Modal.Body>
-      </Modal>
+      <PostModal
+        show={show}
+        handleClose={handleClose}
+        handleSubmit={handleSubmit}
+        formData={formData}
+        setFormData={setFormData}
+        onInputChange={onInputChange}
+        onFileChange={onFileChange}
+        errors={errors}
+        type="create"
+      />
     </>
   );
-};
+}
 
 export default CreatePost;

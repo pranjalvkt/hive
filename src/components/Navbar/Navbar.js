@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
-import CreatePost from "../CreatePost/CreatePost";
+import CreatePost from "../Post/CreatePost";
 import NotificationModal from "../Notification/NotificationModal";
 import SearchModal from "../Search/SearchModal";
+import GenericModal from "../Common/GenericModal";
 import "./Navbar.css";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserRequest } from "../../actions/authActions";
@@ -20,8 +21,14 @@ const Navbar = () => {
 
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
+  const [showLogoutModal, setShowLogoutModal] = useState(false);
+
+  const openLogoutModal = () => {
+    setShowLogoutModal(true);
+  }
 
   const handleLogout = () => {
+    setShowLogoutModal(false);
     localStorage.removeItem("authToken");
     toast.success("You have logged out successfully.");
     navigate("/auth/login");
@@ -39,7 +46,7 @@ const Navbar = () => {
     } else {
       navigate("/auth/login");
     }
-  }, [token, dispatch]);
+  }, [token, dispatch, navigate]);
 
   useEffect(() => {
     if (user) {
@@ -58,7 +65,7 @@ const Navbar = () => {
     <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container-fluid">
         <ul className="navbar-nav me-auto">
-          <li className="nav-item" onClick={() => navigate("/")}>
+          <li className="nav-item" onClick={() => navigate("/")} title="Home">
             <h2 className="cursor">Hive</h2>
           </li>
         </ul>
@@ -82,6 +89,7 @@ const Navbar = () => {
                   className="icons"
                   src={`${process.env.PUBLIC_URL}/assets/icons/chat-left-text.svg`}
                   alt="Chat"
+                  title="Chat"
                 />
               </button>
             </li>
@@ -91,6 +99,7 @@ const Navbar = () => {
                   className="icons"
                   src={`${process.env.PUBLIC_URL}/assets/icons/bell.svg`}
                   alt="Notification"
+                  title="Notification"
                 />
               </button>
             </li>
@@ -100,11 +109,12 @@ const Navbar = () => {
                   className="icons"
                   src={`${process.env.PUBLIC_URL}/assets/icons/search.svg`}
                   alt="Search"
+                  title="Search"
                 />
               </button>
             </li>
             <li className="nav-item" onClick={() => navigate("/friends")}>
-              <button className="btn">
+              <button className="btn" title="Connections">
                 <img
                   className="icons"
                   src={`${process.env.PUBLIC_URL}/assets/icons/person.svg`}
@@ -136,10 +146,10 @@ const Navbar = () => {
             ) : (
               <>
                 {/* Display User Profile Picture */}
-                <li className="nav-item d-flex align-items-center">
+                <li className="nav-item d-flex align-items-center ">
                   <img
                     src={profilePic}
-                    alt="User Profile"
+                    alt="User Profile" 
                     className="rounded-circle cursor"
                     style={{
                       width: "100%",
@@ -147,10 +157,11 @@ const Navbar = () => {
                       objectFit: "cover", // Ensures image covers the area
                     }}
                     onClick={() => navigate("/profile")}
+                    title="Profile"
                   />
                 </li>
                 <li className="nav-item">
-                  <button className="btn" onClick={handleLogout}>
+                  <button className="btn" onClick={openLogoutModal} title="Logout">
                     <img className="icons" src={`${process.env.PUBLIC_URL}/assets/icons/box-arrow-right.svg`} alt="Log out" />
                   </button>
                 </li>
@@ -170,6 +181,18 @@ const Navbar = () => {
       <SearchModal
         show={showSearchModal}
         handleClose={handleCloseSearchModal}
+      />
+
+<GenericModal
+        show={showLogoutModal}
+        title="Confirm Action"
+        body={`Are you sure you want to Logout ?`}
+        onClose={() => setShowLogoutModal(false)}
+        onConfirm={handleLogout}
+        confirmText="Yes, Proceed"
+        cancelText="No, Cancel"
+        confirmVariant="danger"
+        cancelVariant="secondary"
       />
     </nav>
   );
