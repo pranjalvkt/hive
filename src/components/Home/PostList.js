@@ -21,7 +21,7 @@ const PostList = () => {
 
   return (
     <div className="container mt-4">
-      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4 justify-content-center">
         {posts.map((post) => (
           <Card key={post._id} post={post}/>
         ))}
