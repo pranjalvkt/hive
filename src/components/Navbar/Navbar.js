@@ -7,7 +7,7 @@ import SearchModal from "../Search/SearchModal";
 import GenericModal from "../Common/GenericModal";
 import "./Navbar.css";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserRequest } from "../../actions/authActions";
+import { getUserRequest, logout } from "../../actions/authActions";
 import { getImage } from "../../helper/utilities";
 
 const Navbar = () => {
@@ -30,6 +30,7 @@ const Navbar = () => {
   const handleLogout = () => {
     setShowLogoutModal(false);
     localStorage.removeItem("authToken");
+    dispatch(logout());
     toast.success("You have logged out successfully.");
     navigate("/auth/login");
   };

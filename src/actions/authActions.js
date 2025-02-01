@@ -74,3 +74,7 @@ export const updateUserFailure = (error) => ({
   type: UPDATE_USER_FAILURE,
   payload: error,
 });
+
+export const logout = () => (
+  { type: "LOGOUT" }
+);

@@ -10,7 +10,9 @@ const PostList = () => {
   const token = localStorage.getItem("authToken");
 
   useEffect(() => {
-    dispatch(fetchPostsRequest(token));
+    if(posts.length === 0) {
+      dispatch(fetchPostsRequest(token));
+    }
   }, []);
 
   if (loading) {
@@ -18,8 +20,8 @@ const PostList = () => {
   }
 
   return (
-    <div className="post-list">
-      <div className="d-sm-flex justify-content-sm-around">
+    <div className="container mt-4">
+      <div className="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
         {posts.map((post) => (
           <Card key={post._id} post={post}/>
         ))}

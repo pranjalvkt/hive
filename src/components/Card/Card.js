@@ -87,8 +87,8 @@ const Card = (props) => {
 
   return (
     <>
-      <div className="w-25 mx-2">
-        <div className="card">
+      <div className="col">
+        <div className="card h-100">
           <div className="card-header d-flex justify-content-between">
             {post.userName}
             <div className="dropdown">
