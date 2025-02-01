@@ -7,6 +7,7 @@ import { getImage } from "../../helper/utilities";
 import { toast } from "react-toastify";
 import { fetchAddedUserRequest } from "../../actions/connectionAction";
 import PostList from "../Home/PostList";
+import FriendCard from "../Friends/FriendCard";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -115,12 +116,7 @@ const Profile = () => {
           <ul className="list-group">
             {connections &&
               connections.map((friend) => (
-                <li
-                  key={friend?.user?._id}
-                  className="list-group-item d-flex justify-content-between align-items-center"
-                >
-                  {friend?.user?.fullName} (@{friend?.user?.email})
-                </li>
+                <FriendCard users={friend?.user} key={friend.user._id} />
               ))}
           </ul>
           <Link to="/friends">

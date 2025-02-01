@@ -7,12 +7,12 @@ const FriendCard = (props) => {
     id,
     buttonProps,
   } = props;
-
+  
   return (
     <>
       <li
         key={users?._id}
-        className="list-group-item d-flex justify-content-between align-items-center"
+        className="list-group-item border border-1 d-flex justify-content-between align-items-center my-2"
       >
         <div className="d-flex align-items-center">
           <img

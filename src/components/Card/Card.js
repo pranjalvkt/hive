@@ -5,6 +5,7 @@ import { deletePostsRequest } from "../../actions/postsActions";
 import GenericModal from "../Common/GenericModal";
 import PostModal from "../Common/PostModal";
 import ShareModal from "../Common/ShareModal";
+import EditPost from "../Post/EditPost";
 
 const Card = (props) => {
   const { post } = props;
@@ -111,9 +112,7 @@ const Card = (props) => {
                 aria-labelledby={`dropdownMenuButton-${post._id}`}
               >
                 <li>
-                  <button className="dropdown-item" onClick={handleEdit}>
-                    Edit Post
-                  </button>
+                  <EditPost post={post}/>
                 </li>
                 <li>
                   <button
