@@ -2,7 +2,12 @@ import { Button } from "react-bootstrap";
 import { getImage } from "../../helper/utilities";
 
 const FriendCard = (props) => {
-  const {users, id, buttonText, handlerFunctionBtn, acceptText, acceptFunction} = props;
+  const {
+    users,
+    id,
+    buttonProps,
+  } = props;
+
   return (
     <>
       <li
@@ -19,22 +24,16 @@ const FriendCard = (props) => {
           {users?.fullName}
         </div>
         <div>
-        <Button
-          className="mx-2"
-          variant={buttonText === "Add Friend" ? 'primary' : "danger"}
-          onClick={() => handlerFunctionBtn(id)}
-        >
-          {buttonText}
-        </Button>
-        {acceptText && <Button
-          className="mx-2"
-          variant='primary'
-          onClick={() => acceptFunction(id)}
-        >
-          {acceptText}
-        </Button>}
+          {buttonProps && buttonProps.map((item) => (
+            <Button
+              className="mx-2"
+              variant={item.variant}
+              onClick={() => item.func(id)}
+            >
+              {item.text}
+            </Button>
+          ))}
         </div>
-        
       </li>
     </>
   );
