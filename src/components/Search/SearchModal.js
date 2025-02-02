@@ -1,23 +1,29 @@
-import { useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap"; // Assuming you're using Bootstrap for modals
+import { useState, useEffect, useCallback } from "react";
+import { Modal, Button, Form } from "react-bootstrap";
+import { debounce } from "../../helper/utilities";
+import { useDispatch, useSelector } from "react-redux";
+import { searchUserRequest } from "../../actions/userAction";
 
 const SearchModal = ({ show, handleClose }) => {
-  const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
+  const dispatch = useDispatch();
+  const{ searchResult, searchLoading } = useSelector((state) => state.user);
   
-  const handleSearch = (e) => {
-    setQuery(e.target.value);
-    // Here you can implement the logic to fetch data based on the query
-    // For now, let's just simulate some results based on the query
-    if (query) {
-      const simulatedResults = ["John Doe", "Jane Smith", "James Brown"].filter(name =>
-        name.toLowerCase().includes(query.toLowerCase())
-      );
-      setResults(simulatedResults);
-    } else {
-      setResults([]);
-    }
-  };
+  const [query, setQuery] = useState("");
+  const token = localStorage.getItem("authToken");
+
+  const fetchResults = useCallback(
+    debounce(async (searchTerm) => {
+      if (!searchTerm) {
+        return;
+      }
+      dispatch(searchUserRequest({query: searchTerm, token}));
+    }, 300),
+    []
+  );
+
+  useEffect(() => {
+    fetchResults(query);
+  }, [query, fetchResults]);
 
   return (
     <Modal show={show} onHide={handleClose} centered>
@@ -29,20 +35,22 @@ const SearchModal = ({ show, handleClose }) => {
           type="text"
           placeholder="Search users..."
           value={query}
-          onChange={handleSearch}
+          onChange={(e) => setQuery(e.target.value)}
         />
         {query && (
           <div className="mt-3">
             <h5>Results:</h5>
-            <ul className="list-unstyled">
-              {results.length > 0 ? (
-                results.map((result, index) => (
-                  <li key={index}>{result}</li>
-                ))
-              ) : (
-                <li>No results found</li>
-              )}
-            </ul>
+            {searchLoading ? (
+              <p>Loading...</p>
+            ) : (
+              <ul className="list-unstyled">
+                {searchResult.length > 0 ? (
+                  searchResult.map((result) => <li key={result._id}>{result.fullName}</li>)
+                ) : (
+                  <li>No results found</li>
+                )}
+              </ul>
+            )}
           </div>
         )}
       </Modal.Body>
