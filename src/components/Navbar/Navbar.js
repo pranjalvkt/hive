@@ -7,18 +7,18 @@ import SearchModal from "../Search/SearchModal";
 import GenericModal from "../Common/GenericModal";
 import "./Navbar.css";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserRequest, logout } from "../../actions/authActions";
+import { logout } from "../../actions/authActions";
+import { getUserRequest } from "../../actions/userAction";
 import { getImage } from "../../helper/utilities";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-  const { user } = useSelector((state) => state.auth);
-  
+  const { user } = useSelector((state) => state.user);
   const token = localStorage.getItem("authToken");
+  
   const [profilePic, setProfilePic] = useState(getImage(user?.profilePic));
-
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -184,7 +184,7 @@ const Navbar = () => {
         handleClose={handleCloseSearchModal}
       />
 
-<GenericModal
+      <GenericModal
         show={showLogoutModal}
         title="Confirm Action"
         body={`Are you sure you want to Logout ?`}

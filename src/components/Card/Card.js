@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import { calculateTimeAgo, getImage } from "../../helper/utilities";
 import { deletePostsRequest } from "../../actions/postsActions";
 import GenericModal from "../Common/GenericModal";
-import PostModal from "../Common/PostModal";
 import ShareModal from "../Common/ShareModal";
 import EditPost from "../Post/EditPost";
 
@@ -13,15 +12,9 @@ const Card = (props) => {
   const dispatch = useDispatch();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
 
   const [deleteId, setDeleteId] = useState(null);
-  const [formData, setFormData] = useState({
-    title: post.title,
-    description: post.description,
-  });
-  const [errors, setErrors] = useState({});
 
   const handleDelete = () => {
     if (deleteId) {
@@ -33,30 +26,6 @@ const Card = (props) => {
   const confirmDelete = (id) => {
     setDeleteId(id);
     setShowDeleteModal(true);
-  };
-
-  const handleEdit = () => {
-    setShowEditModal(true);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let newErrors = {};
-
-    if (!formData.title.trim()) newErrors.title = "Title is required";
-    if (!formData.description.trim())
-      newErrors.description = "Description is required";
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
-    setShowEditModal(false);
-  };
-
-  const onInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleShare = (platform) => {
@@ -161,18 +130,6 @@ const Card = (props) => {
         cancelText="Cancel"
         confirmVariant="danger"
         cancelVariant="secondary"
-      />
-
-      <PostModal
-        show={showEditModal}
-        handleClose={() => setShowEditModal(false)}
-        handleSubmit={handleSubmit}
-        formData={formData}
-        setFormData={setFormData}
-        onInputChange={onInputChange}
-        onFileChange={() => {}}
-        errors={errors}
-        type="edit"
       />
 
       <ShareModal

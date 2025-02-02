@@ -2,14 +2,12 @@ import { call, put, takeEvery } from 'redux-saga/effects';
 import { toast } from 'react-toastify';
 
 import { 
-  loginAPI, registerAPI, userDetailsAPI, updateUserDetailsAPI 
+  loginAPI, registerAPI 
 } from '../services/authService';
 import { 
-  LOGIN_REQUEST, REGISTER_REQUEST, GET_USER_REQUEST, UPDATE_USER_REQUEST, 
+  LOGIN_REQUEST, REGISTER_REQUEST,
   loginSuccess, loginFailure, 
   registerSuccess, registerFailure,
-  getUserSuccess, getUserFailure,
-  updateUserSuccess, updateUserFailure
 } from '../actions/authActions';
 
 function* loginSaga(action) {
@@ -40,34 +38,7 @@ function* registerSaga(action) {
   }
 }
 
-function* getUserSaga(action) {
-  try {
-    const {token} = action.payload;
-    const response = yield call(userDetailsAPI, { token });
-    yield put(getUserSuccess(response.data));
-
-  } catch (error) {
-    yield put(getUserFailure(error.message));
-    localStorage.removeItem("authToken");
-    toast.error("Something went wrong!");
-  }
-}
-
-function* updateUserSaga(action) {
-  try {
-    const response = yield call(updateUserDetailsAPI, action.payload);
-    yield put(updateUserSuccess(response.data));
-    toast.success("Updated successfully.");
-  } catch (error) {
-    yield put(updateUserFailure(error.message));
-    localStorage.removeItem("authToken");
-    toast.error("Something went wrong!");
-  }
-}
-
 export default function* authSaga() {
   yield takeEvery(LOGIN_REQUEST, loginSaga);
   yield takeEvery(REGISTER_REQUEST, registerSaga);
-  yield takeEvery(GET_USER_REQUEST, getUserSaga);
-  yield takeEvery(UPDATE_USER_REQUEST, updateUserSaga);
 }
