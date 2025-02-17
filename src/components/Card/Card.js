@@ -7,8 +7,7 @@ import ShareModal from "../Common/ShareModal";
 import EditPost from "../Post/EditPost";
 
 const Card = (props) => {
-  const { post } = props;
-  
+  const { post, handleRedirect } = props;
   const dispatch = useDispatch();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -30,7 +29,7 @@ const Card = (props) => {
 
   const handleShare = (platform) => {
     const postUrl = window.location.href;
-    const message = `Check out this post: ${post.title} - ${postUrl}api/posts/${post._id}`;
+    const message = `Check out this post: ${post.title} - ${postUrl}posts/${post._id}`;
 
     let shareUrl = "";
     switch (platform) {
@@ -102,8 +101,8 @@ const Card = (props) => {
               </ul>
             </div>
           </div>
-
-          <img
+        <div className="cursor" onClick={() => handleRedirect(post._id)}>
+        <img
             src={getImage(post.image_file)}
             className="card-img-top"
             alt={post.title}
@@ -117,6 +116,8 @@ const Card = (props) => {
               Last updated {calculateTimeAgo(post.createdAt)}
             </small>
           </div>
+        </div>
+          
         </div>
       </div>
 

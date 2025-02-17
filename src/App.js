@@ -10,6 +10,7 @@ import Navbar from './components/Navbar/Navbar';
 import FriendsList from './components/Friends/FriendsList';
 import Profile from './components/Profile/Profile';
 import ConversationList from './components/Messenger/ConversationList';
+import ViewPost from "./components/Post/ViewPost";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
         <Route path='/friends' element={<ProtectedRoute><FriendsList /></ProtectedRoute>}/>
         <Route path='/chat' element={<ProtectedRoute><ConversationList /></ProtectedRoute>}/>
+        <Route path='/posts/:id' element={<ProtectedRoute><ViewPost /></ProtectedRoute>}/>
       </Routes>
     </Router>
   );

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Form, Modal, InputGroup, FormControl } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateUserRequest } from "../../actions/userAction";
 import { getImage } from "../../helper/utilities";
@@ -12,6 +12,10 @@ import BeeLoader from "../Common/BeeLoader";
 
 const Profile = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
+  if(id) {
+    
+  }
 
   const { user, loading: userLoading } = useSelector((state) => state.user);
 
