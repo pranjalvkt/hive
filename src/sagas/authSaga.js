@@ -14,11 +14,11 @@ function* loginSaga(action) {
   try {
     const { email, password } = action.payload;
     const response = yield call(loginAPI, { email, password });
-    const { token, user_email, user_id, user_name } = response.data;
+    const { token } = response.data;
 
     localStorage.setItem('authToken', token);
 
-    yield put(loginSuccess({ user_email, user_id, user_name }));
+    yield put(loginSuccess());
     toast.success("Login successful!");
   } catch (error) {
     yield put(loginFailure(error.message));

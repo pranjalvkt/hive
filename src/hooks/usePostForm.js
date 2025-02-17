@@ -4,7 +4,7 @@ import { createPostRequest } from "../actions/postsActions";
 
 export const usePostForm = (initialData = null, type = "create") => {
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
 
   const [formData, setFormData] = useState(
     initialData || {
