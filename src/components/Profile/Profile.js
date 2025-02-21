@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Button, Form, Modal, InputGroup, FormControl } from "react-bootstrap";
 import { Link, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -31,11 +31,11 @@ const Profile = () => {
   const [newUsername, setNewUsername] = useState("");
   const [newProfilePic, setNewProfilePic] = useState(null);
 
-  const fetchUserDetails = () => {
-    setEmail(user.user_email);
-    setUsername(user.user_name);
+  const fetchUserDetails = useCallback(() => {
+    setEmail(user?.user_email);
+    setUsername(user?.user_name);
     setProfilePic(getImage(user?.profilePic));
-  };
+  }, [user]);
 
   const updateUserDetails = () => {
     if (!newUsername && !newProfilePic) {
@@ -55,7 +55,7 @@ const Profile = () => {
     if (user) {
       fetchUserDetails();
     }
-  }, [user]);
+  }, [fetchUserDetails, user]);
 
   useEffect(() => {
     if (connections.length === 0) {
