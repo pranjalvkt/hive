@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useMemo } from "react";
 import { Modal, Button, Form } from "react-bootstrap";
 import { debounce } from "../../helper/utilities";
 import { useDispatch, useSelector } from "react-redux";
@@ -11,19 +11,14 @@ const SearchModal = ({ show, handleClose }) => {
   const [query, setQuery] = useState("");
   const token = localStorage.getItem("authToken");
 
-  const fetchResults = useCallback(
-    debounce(async (searchTerm) => {
-      if (!searchTerm) {
-        return;
-      }
-      dispatch(searchUserRequest({query: searchTerm, token}));
-    }, 300),
-    []
+  const fetchResults = useMemo(
+    () =>
+      debounce(async (searchTerm) => {
+        if (!searchTerm) return;
+        dispatch(searchUserRequest({ query: searchTerm, token }));
+      }, 300),
+    [dispatch, token]
   );
-
-  useEffect(() => {
-    fetchResults(query);
-  }, [query, fetchResults]);
 
   return (
     <Modal show={show} onHide={handleClose} centered>
@@ -35,7 +30,11 @@ const SearchModal = ({ show, handleClose }) => {
           type="text"
           placeholder="Search users..."
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => {
+              fetchResults(e.target.value);
+              setQuery(e.target.value);
+            }
+          }
         />
         {query && (
           <div className="mt-3">
