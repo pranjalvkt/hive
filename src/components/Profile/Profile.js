@@ -129,7 +129,7 @@ const Profile = () => {
               <h5 className="mt-4">Friends</h5>
               <ul className="list-group">
                 {connections &&
-                  connections.map((friend) => (
+                  connections?.map((friend) => (
                     <FriendCard users={friend?.user} key={friend.user._id} />
                   ))}
               </ul>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import CreatePost from "../Post/CreatePost";
@@ -35,11 +35,11 @@ const Navbar = () => {
     navigate("/auth/login");
   };
 
-  const fetchProfile = () => {
+  const fetchProfile = useCallback(() => {
     if(user) {
       setProfilePic(getImage(user?.profilePic));
     }
-  }
+  }, [user])
 
   useEffect(() => {
     if (token) {
@@ -53,7 +53,7 @@ const Navbar = () => {
     if (user) {
       fetchProfile();
     }
-  }, [user]);
+  }, [fetchProfile, user]);
 
 
   const handleShowSearchModal = () => setShowSearchModal(true);
