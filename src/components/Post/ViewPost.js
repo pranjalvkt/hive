@@ -19,7 +19,7 @@ const Post = () => {
     if (posts.length === 0) {
       dispatch(fetchPostsRequest(token));
     }
-  }, []);
+  }, [dispatch, posts, token]);
 
   let newPost = {
     ...post,

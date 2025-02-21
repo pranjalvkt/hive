@@ -15,7 +15,7 @@ const PostList = () => {
     if(posts.length === 0) {
       dispatch(fetchPostsRequest(token));
     }
-  }, []);
+  }, [token, dispatch, posts]);
 
   if (loading) {
     return <div>Loading...</div>;

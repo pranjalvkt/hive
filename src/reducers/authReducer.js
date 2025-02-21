@@ -10,6 +10,7 @@ import {
 const initialState = {
   loading: false,
   error: null,
+  loginSuccess: false,
 };
 
 const authReducer = (state = initialState, action) => {
@@ -18,10 +19,11 @@ const authReducer = (state = initialState, action) => {
     case REGISTER_REQUEST:
       return { ...state, loading: true };
     case LOGIN_SUCCESS:
-      return { ...state, loading: false };
+      return { ...state, loading: false, loginSuccess: true };
     case REGISTER_SUCCESS:
       return { ...state, loading: false };
     case LOGIN_FAILURE:
+      return { ...state, loading: false, loginSuccess: false };
     case REGISTER_FAILURE:
       return { ...state, loading: false, error: action.payload };
     default:

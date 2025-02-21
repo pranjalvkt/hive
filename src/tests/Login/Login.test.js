@@ -82,7 +82,7 @@ describe("Login Component", () => {
     fireEvent.click(screen.getByRole("button", { name: /login/i }));
   
     await waitFor(() => {
-      expect(axios.post).toHaveBeenCalledWith("http://localhost:3001/api/login", {
+      expect(axios.post).toHaveBeenCalledWith("https://hive-server-tpz5.onrender.com/api/login", {
         email: "user@example.com",
         password: "password123",
       });
@@ -111,7 +111,7 @@ describe("Login Component", () => {
     fireEvent.click(screen.getByRole("button", { name: /login/i }));
   
     await waitFor(() => {
-      expect(axios.post).toHaveBeenCalledWith("http://localhost:3001/api/login", {
+      expect(axios.post).toHaveBeenCalledWith("https://hive-server-tpz5.onrender.com/api/login", {
         email: "user@example.com",
         password: "password123",
       });

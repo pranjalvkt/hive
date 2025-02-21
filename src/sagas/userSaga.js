@@ -44,8 +44,6 @@ function* updateUserSaga(action) {
 }
 
 function* searchUserSaga(action) {
-  console.log(action.payload);
-
   try {
     const response = yield call(searchUserAPI, action.payload);
     yield put(searchUserSuccess(response));
