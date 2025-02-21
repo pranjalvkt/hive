@@ -61,13 +61,13 @@ const Profile = () => {
     if (connections.length === 0) {
       dispatch(fetchAddedUserRequest({ token }));
     }
-  }, []);
+  }, [connections, dispatch, token]);
 
   useEffect(() => {
     if (connections.length === 0) {
       dispatch(fetchAddedUserRequest({ token }));
     }
-  }, []);
+  }, [dispatch, connections, token]);
 
   const handleProfilePicChange = (e) => {
     const file = e.target.files[0];

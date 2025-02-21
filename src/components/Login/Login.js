@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "./Login.css";
@@ -14,7 +14,7 @@ const Login = () => {
   const navigate = useNavigate();
   const validateEmail = (email) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const validatePassword = (password) => password.length >= 6;
-  const { loading } = useSelector((state) => state.auth);
+  const { loginSuccess, loading } = useSelector((state) => state.auth);
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -30,13 +30,14 @@ const Login = () => {
 
     try {
       dispatch(loginRequest({email, password}));
-      setTimeout(() => {
-        navigate("/");
-      }, 1000)
     } catch (err) {
       toast.error(err.response?.data?.message || "Login failed. Please try again.");
     }
   };
+
+  useEffect(() => {
+    if(loginSuccess) navigate("/");
+  }, [loginSuccess, navigate])
 
   return (
     <div className="login-container">
