@@ -3,24 +3,17 @@ import { useDispatch } from "react-redux";
 import { calculateTimeAgo, getImage } from "../../helper/utilities";
 import { deletePostsRequest } from "../../actions/postsActions";
 import GenericModal from "../Common/GenericModal";
-import PostModal from "../Common/PostModal";
 import ShareModal from "../Common/ShareModal";
+import EditPost from "../Post/EditPost";
 
 const Card = (props) => {
-  const { post } = props;
-  
+  const { post, handleRedirect } = props;
   const dispatch = useDispatch();
 
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
 
   const [deleteId, setDeleteId] = useState(null);
-  const [formData, setFormData] = useState({
-    title: post.title,
-    description: post.description,
-  });
-  const [errors, setErrors] = useState({});
 
   const handleDelete = () => {
     if (deleteId) {
@@ -34,33 +27,9 @@ const Card = (props) => {
     setShowDeleteModal(true);
   };
 
-  const handleEdit = () => {
-    setShowEditModal(true);
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    let newErrors = {};
-
-    if (!formData.title.trim()) newErrors.title = "Title is required";
-    if (!formData.description.trim())
-      newErrors.description = "Description is required";
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-    
-    setShowEditModal(false);
-  };
-
-  const onInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
   const handleShare = (platform) => {
     const postUrl = window.location.href;
-    const message = `Check out this post: ${post.title} - ${postUrl}api/posts/${post._id}`;
+    const message = `Check out this post: ${post.title} - ${postUrl}posts/${post._id}`;
 
     let shareUrl = "";
     switch (platform) {
@@ -111,9 +80,7 @@ const Card = (props) => {
                 aria-labelledby={`dropdownMenuButton-${post._id}`}
               >
                 <li>
-                  <button className="dropdown-item" onClick={handleEdit}>
-                    Edit Post
-                  </button>
+                  <EditPost post={post}/>
                 </li>
                 <li>
                   <button
@@ -134,8 +101,8 @@ const Card = (props) => {
               </ul>
             </div>
           </div>
-
-          <img
+        <div className="cursor" onClick={() => handleRedirect(post._id)}>
+        <img
             src={getImage(post.image_file)}
             className="card-img-top"
             alt={post.title}
@@ -150,6 +117,8 @@ const Card = (props) => {
             </small>
           </div>
         </div>
+          
+        </div>
       </div>
 
       <GenericModal
@@ -162,18 +131,6 @@ const Card = (props) => {
         cancelText="Cancel"
         confirmVariant="danger"
         cancelVariant="secondary"
-      />
-
-      <PostModal
-        show={showEditModal}
-        handleClose={() => setShowEditModal(false)}
-        handleSubmit={handleSubmit}
-        formData={formData}
-        setFormData={setFormData}
-        onInputChange={onInputChange}
-        onFileChange={() => {}}
-        errors={errors}
-        type="edit"
       />
 
       <ShareModal

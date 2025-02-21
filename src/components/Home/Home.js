@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import "react-toastify/dist/ReactToastify.css";
 import PostList from "./PostList";
@@ -6,18 +6,19 @@ import './Home.css'
 import { useSelector } from "react-redux";
 
 const Home = () => {
-  const { loading, user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.user);
+  const { loading } = useSelector((state) => state.auth);
   const [userName, setUserName] = useState(user?.user_name);
 
-  const fetchUserDetails = () => {
+  const fetchUserDetails = useCallback(() => {
     setUserName(user?.user_name);
-  };
+  }, [user]);
   
   useEffect(() => {
     if (user) {
       fetchUserDetails(); // Only fetch profile after user data is available
     }
-  }, [user]);
+  }, [fetchUserDetails, user]);
 
   return (
     <div className="home-container">

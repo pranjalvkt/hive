@@ -97,7 +97,7 @@ const FriendsList = () => {
         <div className="col-md-6">
           <h3>Your Friends</h3>
           <ul className="list-group">
-            {connections && connections.map(friend => (
+            {connections && connections?.map(friend => (
               <FriendCard 
                 buttonProps={
                   [

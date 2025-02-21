@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate, Link, useLocation } from "react-router-dom";
 import { toast } from "react-toastify";
 import CreatePost from "../Post/CreatePost";
@@ -7,18 +7,18 @@ import SearchModal from "../Search/SearchModal";
 import GenericModal from "../Common/GenericModal";
 import "./Navbar.css";
 import { useSelector, useDispatch } from "react-redux";
-import { getUserRequest, logout } from "../../actions/authActions";
+import { logout } from "../../actions/authActions";
+import { getUserRequest } from "../../actions/userAction";
 import { getImage } from "../../helper/utilities";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
-  const { user } = useSelector((state) => state.auth);
-  
+  const { user } = useSelector((state) => state.user);
   const token = localStorage.getItem("authToken");
+  
   const [profilePic, setProfilePic] = useState(getImage(user?.profilePic));
-
   const [showNotificationModal, setShowNotificationModal] = useState(false);
   const [showSearchModal, setShowSearchModal] = useState(false);
   const [showLogoutModal, setShowLogoutModal] = useState(false);
@@ -35,11 +35,11 @@ const Navbar = () => {
     navigate("/auth/login");
   };
 
-  const fetchProfile = () => {
+  const fetchProfile = useCallback(() => {
     if(user) {
       setProfilePic(getImage(user?.profilePic));
     }
-  }
+  }, [user])
 
   useEffect(() => {
     if (token) {
@@ -53,7 +53,7 @@ const Navbar = () => {
     if (user) {
       fetchProfile();
     }
-  }, [user]);
+  }, [fetchProfile, user]);
 
 
   const handleShowSearchModal = () => setShowSearchModal(true);
@@ -184,7 +184,7 @@ const Navbar = () => {
         handleClose={handleCloseSearchModal}
       />
 
-<GenericModal
+      <GenericModal
         show={showLogoutModal}
         title="Confirm Action"
         body={`Are you sure you want to Logout ?`}

@@ -2,7 +2,7 @@ import React from "react";
 import { usePostForm } from "../../hooks/usePostForm";
 import PostModal from "../Common/PostModal";
 
-function CreatePost() {
+function EditPost({ post }) {
   const {
     formData,
     setFormData,
@@ -13,16 +13,12 @@ function CreatePost() {
     handleSubmit,
     onInputChange,
     onFileChange,
-  } = usePostForm();
+  } = usePostForm(post, "edit"); // Pass the post data to the hook for editing
 
   return (
     <>
-      <button className="btn" onClick={() => setShow(true)} title="Create Post">
-        <img
-          className="icons"
-          src={`${process.env.PUBLIC_URL}/assets/icons/plus-square.svg`}
-          alt="Create post"
-        />
+      <button className="btn dropdown-item" onClick={() => setShow(true)} title="Edit Post">
+      Edit Post
       </button>
 
       <PostModal
@@ -34,10 +30,10 @@ function CreatePost() {
         onInputChange={onInputChange}
         onFileChange={onFileChange}
         errors={errors}
-        type="create"
+        type="edit"
       />
     </>
   );
 }
 
-export default CreatePost;
+export default EditPost;
