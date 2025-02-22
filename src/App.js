@@ -23,7 +23,7 @@ function App() {
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
         <Route path='/friends' element={<ProtectedRoute><FriendsList /></ProtectedRoute>}/>
-        <Route path='/chat' element={<ProtectedRoute><ConversationList /></ProtectedRoute>}/>
+        {/* <Route path='/chat' element={<ProtectedRoute><ConversationList /></ProtectedRoute>}/> */}
         <Route path='/posts/:id' element={<ProtectedRoute><ViewPost /></ProtectedRoute>}/>
       </Routes>
     </Router>
