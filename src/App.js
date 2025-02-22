@@ -9,7 +9,7 @@ import Registration from './components/Registration/Registration';
 import Navbar from './components/Navbar/Navbar';
 import FriendsList from './components/Friends/FriendsList';
 import Profile from './components/Profile/Profile';
-import ConversationList from './components/Messenger/ConversationList';
+// import ConversationList from './components/Messenger/ConversationList';
 import ViewPost from "./components/Post/ViewPost";
 
 function App() {
