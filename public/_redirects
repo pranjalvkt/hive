@@ -1,1 +1,2 @@
+/chat    https://chatinhive.netlify.app/chat/ 200
 /chat/*   https://chatinhive.netlify.app/:splat 200
