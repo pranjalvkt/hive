@@ -84,7 +84,7 @@ const Navbar = () => {
         <div className="collapse navbar-collapse" id="navbarNavDropdown">
         {token && (
           <ul className="navbar-nav ms-auto">
-            <li className="nav-item" onClick={() => navigate("/chat")}>
+            <li className="nav-item" onClick={() => navigate("/chat/")}>
               <button className="btn">
                 <img
                   className="icons"
