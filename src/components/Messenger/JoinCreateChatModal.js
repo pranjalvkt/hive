@@ -47,6 +47,7 @@ const JoinCreateChatModal = ({ show, onClose, type }) => {
         onClose();
         navigate(`/chat/${room.roomId}`);
       } catch (error) {
+        setLoading(false);
         if (error.status === 400) {
           toast.error(error.response.data);
         } else {
@@ -62,7 +63,9 @@ const JoinCreateChatModal = ({ show, onClose, type }) => {
   async function createRoom() {
     if (validateForm()) {
       try {
+        setLoading(true);
         const response = await createRoomApi(detail.roomId);
+        setLoading(false);
         toast.success("Room Created Successfully !!");
         setCurrentUser(detail.userName);
         setRoomId(response.roomId);
@@ -70,6 +73,7 @@ const JoinCreateChatModal = ({ show, onClose, type }) => {
         onClose();
         navigate(`/chat/${detail.roomId}`);
       } catch (error) {
+        setLoading(false);
         console.log(error);
         if (error.status === 400) {
           toast.error("Room already exists !!");
