@@ -8,7 +8,6 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Registration from './components/Registration/Registration';
 import FriendsList from './components/Friends/FriendsList';
 import Profile from './components/Profile/Profile';
-import ConversationList from './components/Messenger/ConversationList';
 import ChatBox from "./components/Messenger/ChatBox";
 import ViewPost from "./components/Post/ViewPost";
 import NewNavbar from "./components/Navbar/v2/Navbar";
@@ -16,6 +15,7 @@ import About from "./components/About/About";
 import Settings from "./components/settings/Settings";
 import UserProfile from "./components/Profile/v2/UserProfile";
 import { ChatProvider } from "./context/ChatContext";
+import JoinCreate from "./components/Messenger/JoinCreate";
 
 function App() {
   return (
@@ -32,7 +32,7 @@ function App() {
         <Route path='/chat' element={
           <ProtectedRoute>
             <ChatProvider>
-              <ConversationList />
+              <JoinCreate />
             </ChatProvider>
           </ProtectedRoute>
         }/>
