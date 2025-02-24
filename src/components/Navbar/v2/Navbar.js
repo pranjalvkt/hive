@@ -22,7 +22,6 @@ import { logout } from "../../../actions/authActions";
 import { toast } from "react-toastify";
 
 const Navbar = () => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
@@ -66,7 +65,7 @@ const Navbar = () => {
   useEffect(() => {
     if (token) {
       dispatch(getUserRequest(token));
-    } else if(location.pathname !== "/auth/register") {
+    } else if (location.pathname !== "/auth/register") {
       navigate("/auth/login");
     }
   }, [token, dispatch, location.pathname, navigate]);
@@ -77,7 +76,7 @@ const Navbar = () => {
     }
   }, [fetchProfile, user]);
 
-  if(location.pathname.includes('/chat/')) {
+  if (location.pathname.includes("/chat/")) {
     return;
   }
 
@@ -205,8 +204,10 @@ const Navbar = () => {
               <div className="hidden md:flex items-center space-x-4">
                 <div className="relative">
                   {location.pathname === "/auth/login" ? (
-                    <span className="cursor-pointer" onClick={(e) => navigate("/auth/register")
-                    }>
+                    <span
+                      className="cursor-pointer"
+                      onClick={(e) => navigate("/auth/register")}
+                    >
                       Register
                     </span>
                   ) : location.pathname === "/auth/register" ? (
@@ -242,7 +243,13 @@ const Navbar = () => {
         {isOpen && (
           <div className="md:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-              <button className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+              <button
+                className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                onClick={() => {
+                  setIsOpen(false);
+                  navigate("/chat");
+                }}
+              >
                 <FiMessageSquare className="h-6 w-6" />
                 <span>Messages</span>
                 {messages > 0 && (
@@ -252,7 +259,13 @@ const Navbar = () => {
                 )}
               </button>
 
-              <button className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+              <button
+                className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                onClick={() => {
+                  setIsOpen(false);
+                  handleShowNotificationModal();
+                }}
+              >
                 <FiBell className="h-6 w-6" />
                 <span>Notifications</span>
                 {notifications > 0 && (
@@ -262,22 +275,53 @@ const Navbar = () => {
                 )}
               </button>
 
-              <button className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+              <button
+                className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                onClick={() => {
+                  setIsOpen(false);
+                  handleShowSearchModal();
+                }}
+              >
                 <FiSearch className="h-6 w-6" />
                 <span>Search</span>
               </button>
 
-              <button className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+              <button
+                className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                onClick={() => {
+                  setIsOpen(false);
+                  navigate("/friends");
+                }}
+              >
                 <FiUsers className="h-6 w-6" />
                 <span>Friends</span>
               </button>
 
               <button className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium bg-indigo-600 text-white hover:bg-indigo-700">
                 <FiPlusSquare className="h-6 w-6" />
-                <span>Create Post</span>
+                <CreatePost />
               </button>
 
-              <button className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-red-600 hover:text-red-700 hover:bg-gray-50">
+              <button className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+                <img
+                  className="h-8 w-8 rounded-full object-cover"
+                  src={profilePic}
+                  alt="Profile"
+                  onClick={() => {
+                    setIsOpen(false);
+                    navigate("/profile");
+                  }}
+                />
+                Profile
+              </button>
+
+              <button
+                className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-red-600 hover:text-red-700 hover:bg-gray-50"
+                onClick={() => {
+                  setIsOpen(false);
+                  openLogoutModal();
+                }}
+              >
                 <FiLogOut className="h-6 w-6" />
                 <span>Sign out</span>
               </button>
