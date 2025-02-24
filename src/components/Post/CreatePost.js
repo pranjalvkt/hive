@@ -17,12 +17,8 @@ function CreatePost() {
 
   return (
     <>
-      <button className="btn" onClick={() => setShow(true)} title="Create Post">
-        <img
-          className="icons"
-          src={`${process.env.PUBLIC_URL}/assets/icons/plus-square.svg`}
-          alt="Create post"
-        />
+      <button className="btn text-white" onClick={() => setShow(true)} title="Create Post">
+        Create
       </button>
 
       <PostModal
