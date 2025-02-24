@@ -1,6 +1,7 @@
 import React from "react";
 import { Card, ListGroup, ListGroupItem, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import JoinCreate from "./JoinCreate";
 
 const ConversationList = () => {
 
@@ -28,7 +29,6 @@ const ConversationList = () => {
   const navigate = useNavigate();
 
   const handleConversationClick = (id) => {
-    // Navigate to the conversation view for the clicked conversation
     navigate(`/chat/${id}`);
   };
 
@@ -72,6 +72,7 @@ const ConversationList = () => {
           ))}
         </ListGroup>
       </Card>
+      <JoinCreate />
     </div>
   );
 };
