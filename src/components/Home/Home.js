@@ -16,7 +16,7 @@ const Home = () => {
   
   useEffect(() => {
     if (user) {
-      fetchUserDetails(); // Only fetch profile after user data is available
+      fetchUserDetails();
     }
   }, [fetchUserDetails, user]);
 
@@ -29,9 +29,8 @@ const Home = () => {
         </div>
       ) : (
         <div className="welcome-message">
-          <h2 className="welcome-msg">Welcome back, {userName}!</h2>
+          <h2 className="welcome-msg">Welcome {userName}!</h2>
         </div>
-        
       )}
       <PostList/>
     </div>

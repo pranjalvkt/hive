@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { acceptRequestRequest, fetchAddedUserRequest, fetchPendingRequestRequest, fetchRecommendedUserRequest, fetchSentRequestRequest, rejectRequestRequest, removeRequestRequest, sendRequestRequest } from "../../actions/connectionAction";
 import FriendCard from "./FriendCard";
 import GenericModal from "../Common/GenericModal";
+import BeeLoader from "../Common/BeeLoader";
 
 const FriendsList = () => {
   const dispatch = useDispatch();
@@ -25,7 +26,8 @@ const FriendsList = () => {
     connections, 
     recommendation, 
     sentRequest, 
-    pendingRequest 
+    pendingRequest,
+    loading
   } = useSelector((state) => state.connection);
 
   const openModal = (actionType, connectionId) => {
@@ -71,6 +73,10 @@ const FriendsList = () => {
       connectionId: connectionId,
     }
     dispatch(acceptRequestRequest({token, data}));
+  }
+
+  if (loading) {
+    return <BeeLoader />;
   }
 
   return (
@@ -163,6 +169,7 @@ const FriendsList = () => {
           </ul>
         </div>
       </div>
+      
       <GenericModal
         show={modalState.show}
         title="Confirm Action"

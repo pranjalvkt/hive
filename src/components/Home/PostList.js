@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { fetchPostsRequest } from "../../actions/postsActions";
 import Card from "../Card/Card";
+import BeeLoader from "../Common/BeeLoader";
 
 const PostList = () => {
   const navigate = useNavigate();
@@ -18,7 +19,7 @@ const PostList = () => {
   }, [token, dispatch, posts]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <BeeLoader />;
   }
 
   const handleRedirect = (id) => {
