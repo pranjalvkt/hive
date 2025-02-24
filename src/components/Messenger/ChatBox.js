@@ -1,15 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import ChatHeader from "./ChatHeader";
 import { FiSend, FiPaperclip, FiSmile } from "react-icons/fi";
-import { baseURL, getMessagess } from "../../services/chatService";
 import SockJS from "sockjs-client";
 import { Stomp } from "@stomp/stompjs";
 import { BsCheck, BsCheckAll } from "react-icons/bs";
-import { calculateTimeAgo, getImage } from "../../helper/utilities";
 import { useSelector } from "react-redux";
+import { baseURL, getMessagess } from "../../services/chatService";
+import ChatHeader from "./ChatHeader";
+import { calculateTimeAgo, getImage } from "../../helper/utilities";
 import useChatContext from "../../context/ChatContext";
+import EmojiPicker from 'emoji-picker-react';
 
 const ChatBox = () => {
   const {
@@ -24,6 +25,7 @@ const ChatBox = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [stompClient, setStompClient] = useState(null);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
   const { user } = useSelector((state) => state.user);
 
   useEffect(() => {
@@ -83,6 +85,7 @@ const ChatBox = () => {
   }, [connected, roomId]);
 
   const sendMessage = async () => {
+    setShowEmojiPicker(false);
     if (stompClient && connected && input.trim()) {
       const message = {
         sender: user.user_id,
@@ -104,6 +107,10 @@ const ChatBox = () => {
     setConnected(false);
     setRoomId("");
   }
+
+  const addEmoji = (emoji) => {
+    setInput((prevInput) => prevInput + emoji.emoji);
+  };
 
   const MessageStatus = ({ status }) => {
     if (status === "sent") return <BsCheck className="text-gray-500" />;
@@ -166,6 +173,12 @@ const ChatBox = () => {
           <div ref={messagesEndRef} />
         </div>
 
+        {showEmojiPicker && (
+          <div className="absolute bottom-20 right-4 z-10">
+            <EmojiPicker onEmojiClick={addEmoji} theme="light" />
+          </div>
+        )}
+
         <div className="border-t bg-white p-4">
           <div className="flex items-center space-x-2 max-w-4xl mx-auto">
             <button
@@ -177,6 +190,7 @@ const ChatBox = () => {
             <button
               className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
               aria-label="Add emoji"
+              onClick={() => setShowEmojiPicker(!showEmojiPicker)}
             >
               <FiSmile className="w-6 h-6 text-gray-500" />
             </button>

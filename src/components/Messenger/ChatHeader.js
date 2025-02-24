@@ -16,8 +16,7 @@ const ChatHeader = ({ handleLogout, roomName }) => {
           className="w-10 h-10 rounded-full"
         />
         <div>
-          <h2 className="font-semibold text-gray-800">{roomName}</h2>
-          <p className="text-sm text-gray-500">Online</p>
+          <h4 className="font-semibold my-0 text-gray-800">{roomName}</h4>
         </div>
       </div>
       <div className="flex items-center space-x-4">
