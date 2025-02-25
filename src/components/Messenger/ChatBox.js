@@ -126,33 +126,33 @@ const ChatBox = () => {
           handleLogout={handleLogout}
           roomName={roomId}
         />
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto p-2 xs:p-4 space-y-2 xs:space-y-4 bg-gray-50">
           {messages.length > 0 && messages?.map((message) => (
             <div
               key={message.timeStamp}
               className={`flex ${
                 message.userId === user?.user_id ? "justify-end" : "justify-start"
-              } items-end space-x-2`}
+              } items-end space-x-1 xs:space-x-2`}
             >
               {message.userId !== user?.user_id && (
                 <img
                   src={getImage(message?.senderProfilePicture)}
                   alt={message?.senderName}
-                  className="w-10 h-10 rounded-full"
+                  className="w-8 h-8 xs:w-10 xs:h-10 rounded-full"
                 />
               )}
               <div className="flex flex-col">
-                <span className="text-sm text-gray-600 mb-1 ml-2">
+                <span className="text-xs xs:text-sm text-gray-600 mb-1 ml-2">
                   {message?.senderName}
                 </span>
                 <div
-                  className={`max-w-[85%] md:max-w-[70%] lg:max-w-[60%] rounded-2xl p-4 min-w-[100%] bg-white text-gray-800 border border-gray-200`}
+                  className={`max-w-[95%] xs:max-w-[85%] md:max-w-[70%] lg:max-w-[60%] rounded-2xl p-2 xs:p-4 min-w-[120px] xs:min-w-[200px] bg-white text-gray-800 border border-gray-200`}
                 >
-                  <p className="text-sm md:text-base break-words leading-relaxed ">
+                  <p className="text-xs xs:text-sm md:text-base break-words leading-relaxed my-0 px-2">
                     {message?.content}
                   </p>
-                  <div className="flex justify-end mt-2 items-center space-x-1">
-                    <span className={`text-xs text-gray-500`}>
+                  <div className="flex justify-end mt-1 xs:mt-2 items-center space-x-1">
+                    <span className={`text-[10px] xs:text-xs text-gray-500`}>
                       {calculateTimeAgo(message?.timeStamp)}
                     </span>
                     {message.sender === user?.user_id && (
@@ -165,7 +165,7 @@ const ChatBox = () => {
                 <img
                   src={getImage(message?.senderProfilePicture)}
                   alt={message.user_name}
-                  className="w-10 h-10 rounded-full"
+                  className="w-8 h-8 xs:w-10 xs:h-10 rounded-full"
                 />
               )}
             </div>
@@ -179,20 +179,20 @@ const ChatBox = () => {
           </div>
         )}
 
-        <div className="border-t bg-white p-4">
-          <div className="flex items-center space-x-2 max-w-4xl mx-auto">
+        <div className="border-t bg-white p-2 xs:p-4">
+          <div className="flex items-center space-x-1 xs:space-x-2 max-w-4xl mx-auto">
             <button
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
+              className="p-1 xs:p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
               aria-label="Add attachment"
             >
-              <FiPaperclip className="w-6 h-6 text-gray-500" />
+              <FiPaperclip className="ww-5 h-5 xs:w-6 xs:h-6 text-gray-500" />
             </button>
             <button
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
+              className="p-1 xs:p-2 hover:bg-gray-100 rounded-full transition-colors duration-200"
               aria-label="Add emoji"
               onClick={() => setShowEmojiPicker(!showEmojiPicker)}
             >
-              <FiSmile className="w-6 h-6 text-gray-500" />
+              <FiSmile className="w-5 h-5 xs:w-6 xs:h-6 text-gray-500" />
             </button>
             <input
               type="text"
@@ -200,16 +200,16 @@ const ChatBox = () => {
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && sendMessage()}
               placeholder="Type a message..."
-              className="flex-1 p-3 rounded-full border border-gray-300 focus:outline-none focus:border-blue-500 transition-colors duration-200 text-black"
+              className="flex-1 p-2 xs:p-3 rounded-full border border-gray-300 focus:outline-none focus:border-blue-500 transition-colors duration-200 text-black"
               aria-label="Message input"
             />
             <button
               onClick={sendMessage}
               disabled={!input.trim()}
-              className="p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              className="p-2 xs:p-3 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               aria-label="Send message"
             >
-              <FiSend className="w-5 h-5" />
+              <FiSend className="w-4 h-4 xs:w-5 xs:h-5" />
             </button>
           </div>
         </div>

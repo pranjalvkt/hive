@@ -51,6 +51,7 @@ const Navbar = () => {
   const toggleMenu = () => setIsOpen(!isOpen);
   const handleLogout = () => {
     setShowLogoutModal(false);
+    setShowProfileMenu(false);
     localStorage.removeItem("authToken");
     dispatch(logout());
     toast.success("You have logged out successfully.");
