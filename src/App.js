@@ -16,6 +16,8 @@ import Settings from "./components/settings/Settings";
 import UserProfile from "./components/Profile/v2/UserProfile";
 import { ChatProvider } from "./context/ChatContext";
 import JoinCreate from "./components/Messenger/JoinCreate";
+import SelectedUserProfile from "./components/Profile/v2/SelectedUserProfile";
+import ConnectionsManager from "./components/Friends/ConnectionsManager";
 
 function App() {
   return (
@@ -28,7 +30,9 @@ function App() {
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
         <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
         <Route path='/user-profile' element={<ProtectedRoute><UserProfile /></ProtectedRoute>}/>
+        <Route path='/user-profile/:id' element={<ProtectedRoute><SelectedUserProfile /></ProtectedRoute>}/>
         <Route path='/friends' element={<ProtectedRoute><FriendsList /></ProtectedRoute>}/>
+        <Route path='/connections' element={<ProtectedRoute><ConnectionsManager /></ProtectedRoute>}/>
         <Route path='/chat' element={
           <ProtectedRoute>
             <ChatProvider>
