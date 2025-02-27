@@ -17,9 +17,10 @@ import { getUserRequest } from "../../../actions/userAction";
 import GenericModal from "../../Common/GenericModal";
 import SearchModal from "../../Search/SearchModal";
 import NotificationModal from "../../Notification/NotificationModal";
-import CreatePost from "../../Post/CreatePost";
 import { logout } from "../../../actions/authActions";
 import { toast } from "react-toastify";
+import PostModal from "../../Common/PostModal";
+import { usePostForm } from "../../../hooks/usePostForm";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -44,6 +45,18 @@ const Navbar = () => {
   const handleShowSearchModal = () => setShowSearchModal(true);
   const handleCloseSearchModal = () => setShowSearchModal(false);
 
+  const {
+    formData,
+    setFormData,
+    errors,
+    show,
+    setShow,
+    handleClose,
+    handleSubmit,
+    onInputChange,
+    onFileChange,
+  } = usePostForm();
+
   const openLogoutModal = () => {
     setShowLogoutModal(true);
   };
@@ -63,13 +76,18 @@ const Navbar = () => {
       setProfilePic(getImage(user?.profilePic));
     }
   }, [user]);
+
   useEffect(() => {
-    if (token) {
+    if (token && !user) {
       dispatch(getUserRequest(token));
-    } else if (location.pathname !== "/auth/register") {
+    }
+  }, [token, dispatch, user]);
+
+  useEffect(() => {
+    if (!token && location.pathname !== "/auth/register") {
       navigate("/auth/login");
     }
-  }, [token, dispatch, location.pathname, navigate]);
+  }, [location.pathname, navigate, token]);
 
   useEffect(() => {
     if (user) {
@@ -150,9 +168,10 @@ const Navbar = () => {
                 <button
                   className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-colors duration-300 flex items-center space-x-2"
                   aria-label="Create Post"
+                  onClick={() => setShow(true)}
                 >
                   <FiPlusSquare className="h-5 w-5" />
-                  <CreatePost />
+                  <span>Create Post</span>
                 </button>
               </div>
             )}
@@ -168,8 +187,11 @@ const Navbar = () => {
                     <img
                       className="h-8 w-8 rounded-full object-cover"
                       src={profilePic}
+                      onError={(e) => {
+                        e.target.src = `https://robohash.org/${user?.user_name}.png`;
+                      }}
                       alt="Profile"
-                      onClick={() => navigate("/profile")}
+                      onClick={() => navigate("/user-profile")}
                     />
                     <IoMdArrowDropdown
                       className="h-5 w-5 text-gray-600"
@@ -298,24 +320,34 @@ const Navbar = () => {
                 <span>Friends</span>
               </button>
 
-              <button className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium bg-indigo-600 text-white hover:bg-indigo-700">
+              <button
+                className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                onClick={() => {
+                  setIsOpen(false);
+                  setShow(true);
+                }}
+              >
                 <FiPlusSquare className="h-6 w-6" />
-                <CreatePost />
+                <span>Create Post</span>
               </button>
 
-              <button className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50">
+              <button
+                className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                onClick={() => {
+                  setIsOpen(false);
+                  navigate("/user-profile");
+                }}
+              >
                 <img
-                  className="h-8 w-8 rounded-full object-cover"
+                  className="h-6 w-6 rounded-full object-cover"
                   src={profilePic}
-                  alt="Profile"
-                  onClick={() => {
-                    setIsOpen(false);
-                    navigate("/profile");
+                  onError={(e) => {
+                    e.target.src = `https://robohash.org/${user?.user_name}.png`;
                   }}
+                  alt="Profile"
                 />
-                Profile
+                <span>Profile</span>
               </button>
-
               <button
                 className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-red-600 hover:text-red-700 hover:bg-gray-50"
                 onClick={() => {
@@ -352,6 +384,18 @@ const Navbar = () => {
           cancelText="No, Cancel"
           confirmVariant="danger"
           cancelVariant="secondary"
+        />
+
+        <PostModal
+          show={show}
+          handleClose={handleClose}
+          handleSubmit={handleSubmit}
+          formData={formData}
+          setFormData={setFormData}
+          onInputChange={onInputChange}
+          onFileChange={onFileChange}
+          errors={errors}
+          type="create"
         />
       </nav>
     </div>

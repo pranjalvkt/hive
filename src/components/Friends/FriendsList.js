@@ -15,12 +15,6 @@ const FriendsList = () => {
     connectionId: null,
   });
 
-  useEffect(() => {
-    dispatch(fetchAddedUserRequest({token}));
-    dispatch(fetchRecommendedUserRequest({token}));
-    dispatch(fetchSentRequestRequest({token}));
-    dispatch(fetchPendingRequestRequest({token}));
-  }, [token, dispatch])
 
   const { 
     connections, 
@@ -29,6 +23,30 @@ const FriendsList = () => {
     pendingRequest,
     loading
   } = useSelector((state) => state.connection);
+
+  useEffect(() => {
+    if(token && !connections.length) {
+      dispatch(fetchAddedUserRequest({token}));
+    }
+  }, [dispatch, token, connections.length])
+
+  useEffect(() => {
+    if(token && !recommendation.length) {
+      dispatch(fetchRecommendedUserRequest({token}));
+    }
+  }, [dispatch, token, recommendation.length])
+
+  useEffect(() => {
+    if(token && !sentRequest.length) {
+      dispatch(fetchSentRequestRequest({token}));
+    }
+  }, [dispatch, token, sentRequest.length])
+
+  useEffect(() => {
+    if(token && !pendingRequest.length) {
+      dispatch(fetchPendingRequestRequest({token}));
+    }
+  }, [dispatch, token, pendingRequest.length])
 
   const openModal = (actionType, connectionId) => {
     setModalState({

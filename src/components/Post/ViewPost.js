@@ -1,25 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
 import { Card, Row, Col, Image } from "react-bootstrap";
 import { getImage } from "../../helper/utilities";
-import { fetchPostsRequest } from "../../actions/postsActions";
+import { fetchPostByIdAPI } from "../../services/postsService";
+import BeeLoader from "../Common/BeeLoader";
 
 const Post = () => {
   const { id } = useParams();
-  const dispatch = useDispatch();
-  const token = localStorage.getItem("authToken");
+  const [post, setPost] = useState();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState();
 
-  const post = useSelector((state) =>
-    state.posts?.posts.find((p) => p._id === id)
-  );
-
-  const { posts } = useSelector((state) => state.posts);
   useEffect(() => {
-    if (posts.length === 0) {
-      dispatch(fetchPostsRequest(token));
-    }
-  }, [dispatch, posts, token]);
+    setLoading(true);
+    fetchPostByIdAPI(id).then((post) => {
+      setPost(post);
+      setLoading(false);
+      setError("");
+    }).catch((error) => {
+      if( error === 404) {
+        setError("Post not found!");
+        setLoading(false);
+      } else {
+        setError("Something went wrong! Please retry");
+        setLoading(false);
+      }
+    })
+  }, [id])
 
   let newPost = {
     ...post,
@@ -29,8 +36,13 @@ const Post = () => {
       { user: "Mike", text: "Great shot!" },
     ],
   };
-  if (!post) {
-    return <div className="text-center text-muted">Post not found</div>;
+
+  if (error) {
+    return <div className="text-center text-muted">{error}</div>;
+  }
+
+  if (loading) {
+    return <BeeLoader />
   }
 
   return (

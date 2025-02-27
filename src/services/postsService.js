@@ -22,3 +22,12 @@ export const deletePostAPI = async (id) => {
     const response = await api.delete(`/posts/${id}`);
     return response;
 }
+
+export const fetchPostByIdAPI = async (id) => {
+    try {
+        const response = await api.get(`/posts/${id}`)
+        return response.data;
+    } catch (error) {
+        throw error.status;
+    }
+}

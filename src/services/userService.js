@@ -29,3 +29,12 @@ export const searchUserAPI = async (data) => {
   });
   return response.data;
 };
+
+export const getUserDetails = async (id) => {
+  try {
+      const response = await api.get(`/getUserDetails/${id}`)
+      return response.data;
+  } catch (error) {
+    throw error.status;
+  }
+}
