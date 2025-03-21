@@ -31,15 +31,6 @@ const ConnectionsManager = () => {
     connectionId: null,
   });
 
-  const openModal = (actionType, connectionId) => {
-    setModalState({
-      show: true,
-      actionType,
-      connectionId,
-    });
-  };
-
-
   const closeModal = () => {
     setModalState({
       show: false,
