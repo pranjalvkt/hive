@@ -29,8 +29,10 @@ function* deletePostSaga(action) {
     const id = action.payload;
     yield call(deletePostAPI, id);
     yield put(deletePostsSuccess(id));
+    toast.success("Post deleted successfully!");
   } catch (error) {
     yield put(deletePostsFailure(error));
+    toast.error('Something went wrong. Please try again.');
   }
 }
 

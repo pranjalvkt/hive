@@ -17,8 +17,8 @@ const UserProfile = () => {
   const dispatch = useDispatch();
   const token = localStorage.getItem("authToken");
   const { user } = useSelector((state) => state.user);
-  const { connections } = useSelector((state) => state.connection);
-  const { posts } = useSelector((state) => state.posts);
+  const { connections, loading: connectionLoading } = useSelector((state) => state.connection);
+  const { posts, loading: postLoading } = useSelector((state) => state.posts);
 
   const [viewMode, setViewMode] = useState("grid");
   const [showModal, setShowModal] = useState(false);
@@ -91,13 +91,13 @@ const UserProfile = () => {
             >
               <div className="text-center">
                 <h3 className="text-2xl font-bold text-gray-900">
-                  {connections?.length > 0 ? connections?.length : "-"}
+                  {connectionLoading ? "-" : connections?.length}
                 </h3>
                 <p className="text-gray-600">Connections</p>
               </div>
               <div className="text-center">
                 <h3 className="text-2xl font-bold text-gray-900">
-                  {posts?.length > 0 ? posts?.length : "-"}
+                  {postLoading ? "-" : posts?.length}
                 </h3>
                 <p className="text-gray-600">Posts</p>
               </div>

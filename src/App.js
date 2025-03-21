@@ -17,7 +17,9 @@ import UserProfile from "./components/Profile/v2/UserProfile";
 import { ChatProvider } from "./context/ChatContext";
 import JoinCreate from "./components/Messenger/JoinCreate";
 import SelectedUserProfile from "./components/Profile/v2/SelectedUserProfile";
-import ConnectionsManager from "./components/Friends/ConnectionsManager";
+import ConnectionsManager from "./components/Friends/v2/ConnectionsManager";
+import SocialFeed from "./components/Home/v2/SocialFeed";
+import DevInProgress from "./components/Common/DevInProgress"
 
 function App() {
   return (
@@ -28,6 +30,7 @@ function App() {
         <Route path="/auth/login" element={<Login />} />
         <Route path='/auth/register' element={<Registration/>} />
         <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/home" element={<ProtectedRoute><SocialFeed /></ProtectedRoute>} />
         <Route path='/profile' element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
         <Route path='/user-profile' element={<ProtectedRoute><UserProfile /></ProtectedRoute>}/>
         <Route path='/user-profile/:id' element={<ProtectedRoute><SelectedUserProfile /></ProtectedRoute>}/>
@@ -50,6 +53,7 @@ function App() {
         <Route path='/posts/:id' element={<ProtectedRoute><ViewPost /></ProtectedRoute>}/>
         <Route path='/about' element={<ProtectedRoute><About /></ProtectedRoute>}/>
         <Route path='/settings' element={<ProtectedRoute><Settings /></ProtectedRoute>}/>
+        <Route path='/in-progress' element={<ProtectedRoute><DevInProgress /></ProtectedRoute>}/>
       </Routes>
     </Router>
   );
