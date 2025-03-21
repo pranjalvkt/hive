@@ -159,8 +159,8 @@ const Navbar = () => {
 
                 <button
                   className="text-gray-600 hover:text-indigo-600 p-2 rounded-full hover:bg-gray-100 transition-all duration-300"
-                  aria-label="Friends"
-                  onClick={() => navigate("/friends")}
+                  aria-label="Connections"
+                  onClick={() => navigate("/connections")}
                 >
                   <FiUsers className="h-6 w-6" />
                 </button>
@@ -178,53 +178,72 @@ const Navbar = () => {
 
             {/* Right Section */}
             {token ? (
-              <div className="hidden md:flex items-center space-x-4">
-                <div className="relative">
-                  <button
-                    className="flex items-center space-x-3 focus:outline-none"
-                    aria-label="User menu"
-                  >
-                    <img
-                      className="h-8 w-8 rounded-full object-cover"
-                      src={profilePic}
-                      onError={(e) => {
-                        e.target.src = `https://robohash.org/${user?.user_name}.png`;
-                      }}
-                      alt="Profile"
-                      onClick={() => navigate("/user-profile")}
-                    />
-                    <IoMdArrowDropdown
-                      className="h-5 w-5 text-gray-600"
-                      onClick={() => setShowProfileMenu(!showProfileMenu)}
-                    />
-                  </button>
+              <>
+                <div className="hidden md:flex items-center space-x-4">
+                  <div className="relative">
+                    <button
+                      className="flex items-center space-x-3 focus:outline-none"
+                      aria-label="User menu"
+                    >
+                      <img
+                        className="h-8 w-8 rounded-full object-cover"
+                        src={profilePic}
+                        onError={(e) => {
+                          e.target.src = `https://robohash.org/${user?.user_name}.png`;
+                        }}
+                        alt="Profile"
+                        onClick={() => navigate("/user-profile")}
+                      />
+                      <IoMdArrowDropdown
+                        className="h-5 w-5 text-gray-600"
+                        onClick={() => setShowProfileMenu(!showProfileMenu)}
+                      />
+                    </button>
 
-                  {showProfileMenu && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2">
-                      <span
-                        onClick={() => navigate("/about")}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      >
-                        About
-                      </span>
-                      <span
-                        onClick={() => navigate("/settings")}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
-                      >
-                        Settings
-                      </span>
-                      <span
-                        onClick={openLogoutModal}
-                        className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 cursor-pointer"
-                      >
-                        Sign out
-                      </span>
-                    </div>
-                  )}
+                    {showProfileMenu && (
+                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2">
+                        <span
+                          onClick={() => navigate("/about")}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                        >
+                          About
+                        </span>
+                        <span
+                          onClick={() => navigate("/settings")}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 cursor-pointer"
+                        >
+                          Settings
+                        </span>
+                        <span
+                          onClick={openLogoutModal}
+                          className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 cursor-pointer"
+                        >
+                          Sign out
+                        </span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+                {/* Mobile menu button */}
+                <div className="md:hidden">
+                  <button
+                    onClick={toggleMenu}
+                    className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
+                    aria-expanded="false"
+                  >
+                    <span className="sr-only">
+                      {isOpen ? "Close main menu" : "Open main menu"}
+                    </span>
+                    {isOpen ? (
+                      <FiX className="block h-6 w-6" />
+                    ) : (
+                      <FiMenu className="block h-6 w-6" />
+                    )}
+                  </button>
+                </div>
+              </>
             ) : (
-              <div className="hidden md:flex items-center space-x-4">
+              <div className="flex items-center space-x-4">
                 <div className="relative">
                   {location.pathname === "/auth/login" ? (
                     <span
@@ -241,24 +260,6 @@ const Navbar = () => {
                 </div>
               </div>
             )}
-
-            {/* Mobile menu button */}
-            <div className="md:hidden">
-              <button
-                onClick={toggleMenu}
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-                aria-expanded="false"
-              >
-                <span className="sr-only">
-                  {isOpen ? "Close main menu" : "Open main menu"}
-                </span>
-                {isOpen ? (
-                  <FiX className="block h-6 w-6" />
-                ) : (
-                  <FiMenu className="block h-6 w-6" />
-                )}
-              </button>
-            </div>
           </div>
         </div>
 
@@ -313,11 +314,11 @@ const Navbar = () => {
                 className="flex items-center space-x-2 w-full px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gray-900 hover:bg-gray-50"
                 onClick={() => {
                   setIsOpen(false);
-                  navigate("/friends");
+                  navigate("/connections");
                 }}
               >
                 <FiUsers className="h-6 w-6" />
-                <span>Friends</span>
+                <span>Connections</span>
               </button>
 
               <button

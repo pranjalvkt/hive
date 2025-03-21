@@ -23,6 +23,7 @@ import {
     removeRequestFailure,
     REMOVE_REQUEST_REQUEST,
 } from '../actions/connectionAction';
+import { toast } from 'react-toastify';
 
 function* fetchConnectionsSaga (action) {
     try {
@@ -48,8 +49,10 @@ function* sendConnectionRequestSaga (action) {
     try {
         const response = yield call(sendConnectionRequestAPI, action.payload);
         yield put(sendRequestSuccess(response.data?.sendRequest));
+        toast.success('Connection request sent!');
     } catch (error) {
         yield put(sendRequestFailure(error));
+        toast.error('Something went wrong. Please try again.');
     }
 }
 
@@ -78,8 +81,10 @@ function* acceptRequestSaga (action) {
         const {token, data} = action.payload;
         const response = yield call(acceptRequestAPI, [token, data]);
         yield put(acceptRequestSuccess(response.data?.acceptedRequests));
+        toast.success('Request accepted!');
     } catch (error) {
         yield put(acceptRequestFailure(error));
+        toast.error('Something went wrong. Please try again.');
     }
 }
 
@@ -88,8 +93,10 @@ function* rejectRequestSaga (action) {
         const {token, data} = action.payload;
         const response = yield call(rejectRequestAPI, [token, data]);
         yield put(rejectRequestSuccess(response?.data?.removedUser));
+        toast.success('Rejected successfully!');
     } catch (error) {
         yield put(rejectRequestFailure(error));
+        toast.error('Something went wrong. Please try again.');
     }
 }
 
@@ -98,8 +105,10 @@ function* removeRequestOrConnectionSaga (action) {
         const {token, data} = action.payload;
         const response = yield call(removeRequestOrConnectionAPI, [token, data]);
         yield put(removeRequestSuccess(response.data?.removedUser));
+        toast.success('Removed successfully!');
     } catch (error) {
         yield put(removeRequestFailure(error));
+        toast.error('Something went wrong. Please try again.');
     }
 }
 

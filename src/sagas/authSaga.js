@@ -15,7 +15,6 @@ function* loginSaga(action) {
     const { email, password } = action.payload;
     const response = yield call(loginAPI, { email, password });
     const { token } = response.data;
-
     localStorage.setItem('authToken', token);
 
     yield put(loginSuccess());
